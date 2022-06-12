@@ -65,6 +65,8 @@ test.serial('Can polyfill before another polyfill', (t) => {
   t.is(globalThis.TypeError !== originalErrors.TypeError, lacksCause)
   setOtherPolyfill()
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  // `error-cause` polyfill `TypeError` inherits from original `Error`, not
+  // from original `TypeError`
   t.is(
     Object.getPrototypeOf(globalThis.TypeError) !== originalErrors.Error,
     lacksCause,
@@ -81,6 +83,8 @@ const unsetOtherPolyfill = function () {
   setGlobalTypeError(originalErrors.TypeError)
 }
 
+// Use TypeError so we can polyfill it without impacting `hasSupport()`
+// return value.
 const setGlobalTypeError = function (value) {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(globalThis, 'TypeError', {
