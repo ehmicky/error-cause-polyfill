@@ -23,14 +23,6 @@ const ALL_ERRORS = [
 
 // eslint-disable-next-line fp/no-loops
 for (const [OriginalAnyError, PonyfillAnyError] of ALL_ERRORS) {
-  assert.notEqual(PonyfillAnyError.captureStackTrace, undefined)
-
-  if (PonyfillAnyError.captureStackTrace !== undefined) {
-    const obj = {}
-    PonyfillAnyError.captureStackTrace(obj)
-    assert(obj.stack.includes('at'))
-  }
-
   if (OriginalAnyError.name === 'Error') {
     assert.notEqual(PonyfillAnyError.stackTraceLimit, undefined)
 

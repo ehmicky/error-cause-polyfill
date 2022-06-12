@@ -137,6 +137,53 @@ const defineParentTypeTests = function ({
       configurable: true,
     })
   })
+
+  if (PonyfillAnyError.name === 'Error') {
+    defineParBaseTypeTests(title, PonyfillAnyError, OriginalAnyError)
+  } else {
+    defineParMiscTypeTests(title, PonyfillAnyError)
+  }
+}
+
+// Tests run only on the parent Type, if "Error"
+const defineParBaseTypeTests = function (
+  title,
+  PonyfillAnyError,
+  OriginalAnyError,
+) {
+  test(`Error.captureStackTrace() is same as original | ${title}`, (t) => {
+    t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
+  })
+
+  test(`Error.captureStackTrace() has right descriptors | ${title}`, (t) => {
+    t.deepEqual(
+      Object.getOwnPropertyDescriptor(PonyfillAnyError, 'captureStackTrace'),
+      {
+        value: PonyfillAnyError.captureStackTrace,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      },
+    )
+  })
+
+  test(`Error.captureStackTrace() works | ${title}`, (t) => {
+    const error = {}
+    PonyfillAnyError.captureStackTrace(error)
+    t.true(error.stack.includes(`${PonyfillAnyError.name}\n`))
+    t.true(error.stack.includes('at '))
+  })
+}
+
+// Tests run only on the parent Type, if not "Error"
+const defineParMiscTypeTests = function (title, PonyfillAnyError) {
+  test(`Error.captureStackTrace() is present | ${title}`, (t) => {
+    t.true('captureStackTrace' in PonyfillAnyError)
+  })
+
+  test(`Error.captureStackTrace() is inherited | ${title}`, (t) => {
+    t.false(hasOwnProperty.call(PonyfillAnyError, 'captureStackTrace'))
+  })
 }
 
 // Tests run on the parent and child error instances
