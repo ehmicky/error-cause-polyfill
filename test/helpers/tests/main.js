@@ -176,16 +176,8 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
   })
 
-  test.skip(`Error.captureStackTrace() has right descriptors | ${title}`, (t) => {
-    t.deepEqual(
-      Object.getOwnPropertyDescriptor(PonyfillAnyError, 'captureStackTrace'),
-      {
-        value: PonyfillAnyError.captureStackTrace,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      },
-    )
+  test(`Error.captureStackTrace() is not enumerable | ${title}`, (t) => {
+    t.false(isEnum.call(PonyfillAnyError, 'captureStackTrace'))
   })
 
   test.skip(`Error.captureStackTrace() works | ${title}`, (t) => {
