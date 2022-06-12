@@ -1,7 +1,7 @@
 import { defineChildInstanceTests } from './child.js'
 import { getInstanceKinds } from './kinds.js'
 import { defineInstanceMiscTests } from './misc.js'
-import { defineInstancePropsTests } from './props.js'
+import { defineInstancePropsTests } from './props/main.js'
 import { defineInstanceProtoTests } from './prototype.js'
 
 // Tests run on the parent and child error instances
