@@ -20,13 +20,18 @@ const defineTests = function ({ name, args, getTypes }) {
     OriginalBaseError,
   } = getTypes(name)
 
-  defineParentTypeTests(name, PonyfillAnyError, OriginalAnyError)
+  const message = 'test'
+  const argsA = [...args, message]
+
+  defineParentTypeTests({
+    title: name,
+    PonyfillAnyError,
+    OriginalAnyError,
+  })
 
   const typeKinds = getTypeKinds(PonyfillAnyError)
   defineTypesTests(typeKinds, name)
 
-  const message = 'test'
-  const argsA = [...args, message]
   const instanceKinds = getInstanceKinds(typeKinds, argsA)
   defineInstancesTests({
     instanceKinds,
@@ -87,11 +92,11 @@ const getInstanceKinds = function (
 }
 
 // Tests run only on the parent Type
-const defineParentTypeTests = function (
+const defineParentTypeTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
-) {
+}) {
   test(`Is instance of original base Error | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
   })
@@ -107,6 +112,10 @@ const defineParentTypeTests = function (
       enumerable: false,
       configurable: true,
     })
+  })
+
+  test(`Constructor length is kept | ${title}`, (t) => {
+    t.is(PonyfillAnyError.length, OriginalAnyError.length)
   })
 }
 
