@@ -43,8 +43,8 @@ import { ERROR_TYPES } from './types.js'
 //        - However, `instanceof` works correctly, in both directions
 //     - `Error.stackTraceLimit|captureStackTrace|prepareStackTrace()` are a
 //       `get|set` property that proxies to underlying `Error.*`
-//     - `Error.__proto__` is original `Error` (not `Object`), and
-//       `Error.__proto__.__proto__` is `Object`
+//     - `*Error.__proto__` is original `*Error`, not `Object` (for `Error`)
+//       nor `Error` (for `*Error`)
 //  - minor:
 //     - `Error.toString()` does not return `function Error() { [native code] }`
 // Issues with error-cause:
