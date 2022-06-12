@@ -58,17 +58,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     configurable: true,
   })
 
-  const originalAnyError = new OriginalAnyError(...errorArgs)
-
-  assert.deepEqual(
-    Object.getOwnPropertyDescriptor(PonyfillAnyError, 'length'),
-    {
-      value: errorArgs.length,
-      writable: false,
-      enumerable: false,
-      configurable: true,
-    },
-  )
   assert.deepEqual(
     Object.getOwnPropertyDescriptor(PonyfillAnyError, 'prototype'),
     {
@@ -216,6 +205,8 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(Object.prototype.toString.call(childError), '[object Error]')
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
+
+  const originalAnyError = new OriginalAnyError(...errorArgs)
 
   if (originalAnyError.name === 'Error') {
     // eslint-disable-next-line no-console, no-restricted-globals

@@ -117,6 +117,15 @@ const defineParentTypeTests = function ({
   test(`Constructor length is kept | ${title}`, (t) => {
     t.is(PonyfillAnyError.length, OriginalAnyError.length)
   })
+
+  test(`Constructor length has right descriptors | ${title}`, (t) => {
+    t.deepEqual(Object.getOwnPropertyDescriptor(PonyfillAnyError, 'length'), {
+      value: PonyfillAnyError.length,
+      writable: false,
+      enumerable: false,
+      configurable: true,
+    })
+  })
 }
 
 // Tests run on the parent and child Types
