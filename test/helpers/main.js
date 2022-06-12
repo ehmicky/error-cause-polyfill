@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
 // eslint-disable-next-line ava/no-ignored-test-files
+import { types } from 'util'
+
 import test from 'ava'
 
 import { ERROR_TYPES } from './types.js'
@@ -200,6 +202,10 @@ const defineInstanceTests = function ({
 
   test(`error.toString() returns name and message | ${title}`, (t) => {
     t.is(error.toString(), `${PonyfillAnyError.name}: ${error.message}`)
+  })
+
+  test(`Keeps error internal slots | ${title}`, (t) => {
+    t.true(types.isNativeError(error))
   })
 }
 

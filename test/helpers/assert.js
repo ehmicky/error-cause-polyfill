@@ -1,6 +1,5 @@
 /* eslint-disable max-depth, max-lines */
 import assert from 'assert/strict'
-import { types } from 'util'
 
 import { getErrors, test, polyfill } from 'error-cause-polyfill'
 
@@ -103,7 +102,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   // eslint-disable-next-line fp/no-loops
   for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
-    assert(types.isNativeError(ponyfillAnyError))
     assert.deepEqual(
       Object.getOwnPropertyDescriptor(ponyfillAnyError, 'message'),
       {
