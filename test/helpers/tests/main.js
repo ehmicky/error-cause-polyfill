@@ -253,17 +253,14 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.false('prepareStackTrace' in PonyfillAnyError)
   })
 
-  test.serial.skip(
-    `MiscError.prepareStackTrace() is a noop | ${title}`,
-    (t) => {
-      const stack = 'testStack'
-      // eslint-disable-next-line fp/no-mutation, no-param-reassign
-      PonyfillAnyError.prepareStackTrace = () => stack
-      t.not(new PonyfillAnyError(...args).stack, stack)
-      // eslint-disable-next-line fp/no-delete, no-param-reassign
-      delete PonyfillAnyError.prepareStackTrace
-    },
-  )
+  test.serial(`MiscError.prepareStackTrace() is a noop | ${title}`, (t) => {
+    const stack = 'testStack'
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.prepareStackTrace = () => stack
+    t.not(new PonyfillAnyError(...args).stack, stack)
+    // eslint-disable-next-line fp/no-delete, no-param-reassign
+    delete PonyfillAnyError.prepareStackTrace
+  })
 
   test(`MiscError.stackTraceLimit is present | ${title}`, (t) => {
     t.true('stackTraceLimit' in PonyfillAnyError)
