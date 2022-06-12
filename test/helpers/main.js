@@ -205,6 +205,10 @@ const defineInstanceTests = function ({
     })
   })
 
+  test(`error.name is correct | ${title}`, (t) => {
+    t.is(error.name, PonyfillAnyError.name)
+  })
+
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
   })
