@@ -22,8 +22,9 @@ const defineTests = function ({ name, args, getTypes }) {
     OriginalBaseError,
   } = getTypes(name)
 
-  const message = 'test'
-  const argsA = [...args, message]
+  const message = 'testMessage'
+  const cause = 'testCause'
+  const argsA = [...args, message, { cause }]
 
   defineParentTypeTests({
     title: name,
@@ -42,6 +43,7 @@ const defineTests = function ({ name, args, getTypes }) {
     OriginalAnyError,
     OriginalBaseError,
     message,
+    cause,
   })
 }
 
@@ -148,6 +150,7 @@ const defineInstancesTests = function ({
   OriginalAnyError,
   OriginalBaseError,
   message,
+  cause,
 }) {
   instanceKinds.forEach(({ title, PonyfillAnyError, error }) => {
     defineInstanceTests({
@@ -158,6 +161,7 @@ const defineInstancesTests = function ({
       OriginalAnyError,
       OriginalBaseError,
       message,
+      cause,
     })
   })
 }
@@ -171,6 +175,7 @@ const defineInstanceTests = function ({
   OriginalAnyError,
   OriginalBaseError,
   message,
+  cause,
 }) {
   test(`Is instance of original base Error | ${title}`, (t) => {
     t.true(error instanceof OriginalBaseError)
@@ -243,6 +248,10 @@ const defineInstanceTests = function ({
       enumerable: false,
       configurable: true,
     })
+  })
+
+  test(`error.cause is patched | ${title}`, (t) => {
+    t.is(error.cause, cause)
   })
 
   test(`error.toString() returns name and message | ${title}`, (t) => {
