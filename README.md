@@ -67,7 +67,7 @@ try {
 }
 ```
 
-This returns a function to undo polyfilling.
+This returns a function to undo everything.
 
 ```js
 import { polyfill } from 'error-cause-polyfill'
@@ -80,9 +80,9 @@ undoPolyfill()
 
 _Return value_: `object`
 
-This returns an object with each error type (`Error`, `TypeError`, etc.) but
-with `error.cause` support. If `error.cause` is already supported, this returns
-the global error types as is.
+Returns an object with each error type (`Error`, `TypeError`, etc.) but with
+`error.cause` support. If `error.cause` is already supported, this returns the
+global error types as is.
 
 Unlike [`polyfill()`](#polyfill), this does not modify the global error types.
 
