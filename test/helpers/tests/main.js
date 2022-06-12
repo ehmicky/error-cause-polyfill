@@ -30,10 +30,7 @@ const defineTests = function ({ name, getTypes }) {
     OriginalAnyError,
   })
 
-  const typeKinds = getTypeKinds(PonyfillAnyError)
-  defineTypesTests(typeKinds, name)
-
-  const instanceKinds = getInstanceKinds(typeKinds, args)
+  const instanceKinds = getInstanceKinds(PonyfillAnyError, args)
   defineInstancesTests({
     instanceKinds,
     name,
@@ -55,13 +52,6 @@ const getArgs = function (name) {
   return { errors, message, cause, args }
 }
 
-// Run each test on the ErrorType, but also a child and grand child of it.
-const getTypeKinds = function (PonyfillAnyError) {
-  const ChildError = getChildError(PonyfillAnyError)
-  const GrandChildError = getChildError(ChildError)
-  return { PonyfillAnyError, ChildError, GrandChildError }
-}
-
 const getChildError = function (ParentError) {
   // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
   class ChildError extends ParentError {}
@@ -75,11 +65,11 @@ const getChildError = function (ParentError) {
   return ChildError
 }
 
-// Run with and without `new` for the base type.
-const getInstanceKinds = function (
-  { PonyfillAnyError, ChildError, GrandChildError },
-  args,
-) {
+// Run each test on the ErrorType, but also a child and grand child of it.
+// Also run with and without `new` for the base type.
+const getInstanceKinds = function (PonyfillAnyError, args) {
+  const ChildError = getChildError(PonyfillAnyError)
+  const GrandChildError = getChildError(ChildError)
   return {
     NewErrorType: {
       PonyfillAnyError,
@@ -152,15 +142,6 @@ const defineParentTypeTests = function ({
     })
   })
 }
-
-// Tests run on the parent and child Types
-const defineTypesTests = function (typeKinds, name) {
-  Object.entries(typeKinds).forEach(([title, PonyfillAnyError]) => {
-    defineTypeTests(`${name} | ${title}`, PonyfillAnyError)
-  })
-}
-
-const defineTypeTests = function (title, PonyfillAnyError) {}
 
 // Tests run on the parent and child error instances
 const defineInstancesTests = function ({
