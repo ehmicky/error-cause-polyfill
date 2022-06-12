@@ -249,7 +249,7 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.false(error.stack.includes(`${PonyfillAnyError.name}\n`))
   })
 
-  test.skip(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
+  test(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
     t.false('prepareStackTrace' in PonyfillAnyError)
   })
 
