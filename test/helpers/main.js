@@ -289,6 +289,10 @@ const defineInstanceTests = function ({
   test(`Keeps error internal slots | ${title}`, (t) => {
     t.true(types.isNativeError(error))
   })
+
+  if (PonyfillAnyError.name === 'AggregateError') {
+    defineAggInstanceTests(title, error)
+  }
 }
 
 // Return property descriptor that is own or is inherited from direct parent
@@ -300,6 +304,13 @@ const getPropertyDescriptor = function (object, propName) {
 }
 
 const { hasOwnProperty: hasOwn } = Object.prototype
+
+// Tests run on the parent and child error instances, for AggregateError
+const defineAggInstanceTests = function (title, error) {
+  test(`error.errors is correct | ${title}`, (t) => {
+    t.true(Array.isArray(error.errors))
+  })
+}
 
 // Tests run on the child error instances
 const defineChildInstanceTests = function (
