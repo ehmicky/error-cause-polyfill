@@ -106,6 +106,14 @@ _Return value_: `boolean`
 
 Returns whether the global error types currently support `error.cause`.
 
+```js
+import { hasSupport, polyfill } from 'error-cause-polyfill'
+
+console.log(hasSupport()) // false
+polyfill()
+console.log(hasSupport()) // true
+```
+
 # Support
 
 For any question, _don't hesitate_ to [submit an issue on GitHub](../../issues).

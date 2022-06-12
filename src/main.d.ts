@@ -1,13 +1,41 @@
-export type UndoPolyfill = () => void
-
 /**
+ * Undo `polyfill()`
  *
  * @example
  * ```js
+ * import { polyfill } from 'error-cause-polyfill'
+ *
+ * const undoPolyfill = polyfill()
+ * undoPolyfill()
+ * ```
+ */
+export type UndoPolyfill = () => void
+
+/**
+ * Modifies the global error types (`Error`, `TypeError`, etc.) so they support
+ * `error.cause`. If `error.cause` is already supported, this is a noop.
+ *
+ * This returns a function to undo everything.
+ *
+ * @example
+ * ```js
+ * import { polyfill } from 'error-cause-polyfill'
+ *
+ * polyfill()
+ *
+ * try {
+ *   doSomething()
+ * } catch (cause) {
+ *   throw new Error('message', { cause })
+ * }
  * ```
  */
 export function polyfill(): UndoPolyfill
 
+/**
+ * Object with each error type (`Error`, `TypeError`, etc.) but with
+ * `error.cause` support.
+ */
 export interface Errors {
   Error: Error
   ReferenceError: Error
@@ -23,17 +51,37 @@ export interface Errors {
 }
 
 /**
+ * Returns an object with each error type (`Error`, `TypeError`, etc.) but with
+ * `error.cause` support. If `error.cause` is already supported, this returns
+ * the global error types as is.
+ *
+ * Unlike `polyfill()`, this does not modify the global error types.
  *
  * @example
  * ```js
+ * import { getErrors } from 'error-cause-polyfill'
+ *
+ * const Errors = getErrors()
+ *
+ * try {
+ *   doSomething()
+ * } catch (cause) {
+ *   throw new Errors.Error('message', { cause })
+ * }
  * ```
  */
 export function getErrors(): Errors
 
 /**
+ * Returns whether the global error types currently support `error.cause`.
  *
  * @example
  * ```js
+ * import { hasSupport, polyfill } from 'error-cause-polyfill'
+ *
+ * console.log(hasSupport()) // false
+ * polyfill()
+ * console.log(hasSupport()) // true
  * ```
  */
 export function hasSupport(): boolean
