@@ -10,4 +10,5 @@ undoPolyfill()
 defineAllTests((name) => ({
   ErrorType: globalThis[name],
   OriginalAnyError: OriginalErrors[name],
+  OriginalBaseError: OriginalErrors.Error,
 }))

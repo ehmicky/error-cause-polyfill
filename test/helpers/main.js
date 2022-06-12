@@ -1,6 +1,6 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
-import { OriginalErrors, Errors } from 'error-cause-polyfill'
+import { Errors } from 'error-cause-polyfill'
 
 import { ERROR_TYPES } from './types.js'
 
@@ -13,13 +13,19 @@ export const defineAllTests = function (getTypes) {
 }
 
 const defineTests = function ({ name, args, getTypes }) {
-  const { ErrorType, OriginalAnyError } = getTypes(name)
+  const { ErrorType, OriginalAnyError, OriginalBaseError } = getTypes(name)
   const message = 'test'
   const argsA = [...args, message]
   const kinds = getKinds(ErrorType, argsA)
   kinds.forEach(({ title, AnyError, error }) => {
     const titleA = `| ${name} | ${title}`
-    defineTestsSeries({ title: titleA, error, AnyError, OriginalAnyError })
+    defineTestsSeries({
+      title: titleA,
+      error,
+      AnyError,
+      OriginalAnyError,
+      OriginalBaseError,
+    })
   })
 }
 
@@ -70,9 +76,10 @@ const defineTestsSeries = function ({
   error,
   AnyError,
   OriginalAnyError,
+  OriginalBaseError,
 }) {
   test(`Is instance of original base Error ${title}`, (t) => {
-    t.true(error instanceof OriginalErrors.Error)
+    t.true(error instanceof OriginalBaseError)
   })
 
   test(`Is instance of polyfill base Error ${title}`, (t) => {

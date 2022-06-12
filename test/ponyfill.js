@@ -6,4 +6,5 @@ import { defineAllTests } from './helpers/main.js'
 defineAllTests((name) => ({
   ErrorType: Errors[name],
   OriginalAnyError: globalThis[name],
+  OriginalBaseError: globalThis.Error,
 }))
