@@ -21,3 +21,12 @@ export const ERROR_TYPES = [
   { name: 'EvalError', args: [] },
   ...(hasAggregateError() ? [{ name: 'AggregateError', args: [[]] }] : []),
 ]
+
+// Retrieve original errors before polyfilling
+export const getOriginalErrors = function () {
+  return Object.fromEntries(ERROR_TYPES.map(getOriginalAnyError))
+}
+
+const getOriginalAnyError = function ({ name }) {
+  return [name, globalThis[name]]
+}
