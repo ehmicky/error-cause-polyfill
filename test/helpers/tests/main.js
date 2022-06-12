@@ -202,6 +202,13 @@ const defineParBaseTypeTests = function ({
     t.is(new PonyfillAnyError(...args).stack, stack)
     // eslint-disable-next-line fp/no-delete, no-param-reassign
     delete PonyfillAnyError.prepareStackTrace
+
+    if ('prepareStackTrace' in Object.getPrototypeOf(PonyfillAnyError)) {
+      // eslint-disable-next-line fp/no-delete
+      delete Object.getPrototypeOf(PonyfillAnyError).prepareStackTrace
+    }
+
+    t.false('prepareStackTrace' in PonyfillAnyError)
   })
 
   test(`Error.stackTraceLimit is same as original | ${title}`, (t) => {
