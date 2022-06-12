@@ -23,3 +23,10 @@ test.serial('polyfill() can be undone', (t) => {
   undoPolyfill()
   t.is(globalThis.Error, originalErrors.Error)
 })
+
+test.serial('polyfill() can be undone twice', (t) => {
+  const undoPolyfill = polyfill()
+  undoPolyfill()
+  undoPolyfill()
+  t.is(globalThis.Error, originalErrors.Error)
+})
