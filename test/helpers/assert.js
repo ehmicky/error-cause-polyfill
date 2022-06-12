@@ -31,7 +31,7 @@ const checkDescriptor = function (object, propName, descriptor) {
     descriptorA.writable === descriptor.writable &&
     descriptorA.enumerable === descriptor.enumerable &&
     descriptorA.configurable === descriptor.configurable &&
-    (!('value' in descriptor) || descriptorA.value === descriptor.value)
+    descriptorA.value === descriptor.value
   )
 }
 
@@ -185,6 +185,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     )
     assert(
       checkDescriptor(ponyfillAnyError, 'stack', {
+        value: ponyfillAnyError.stack,
         writable: true,
         enumerable: false,
         configurable: true,
@@ -203,6 +204,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       assert(Array.isArray(ponyfillAnyError.errors))
       assert(
         checkDescriptor(ponyfillAnyError, 'errors', {
+          value: ponyfillAnyError.errors,
           writable: true,
           enumerable: false,
           configurable: true,
@@ -244,6 +246,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   )
   assert(
     checkDescriptor(childError, 'stack', {
+      value: childError.stack,
       writable: true,
       enumerable: false,
       configurable: true,
@@ -262,6 +265,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     assert(Array.isArray(childError.errors))
     assert(
       checkDescriptor(childError, 'errors', {
+        value: childError.errors,
         writable: true,
         enumerable: false,
         configurable: true,
