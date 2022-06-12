@@ -180,7 +180,7 @@ const defineParBaseTypeTests = function ({
     t.false(isEnum.call(PonyfillAnyError, 'captureStackTrace'))
   })
 
-  test.skip(`Error.captureStackTrace() works | ${title}`, (t) => {
+  test(`Error.captureStackTrace() works | ${title}`, (t) => {
     const error = {}
     PonyfillAnyError.captureStackTrace(error)
     t.true(error.stack.includes(`${PonyfillAnyError.name}\n`))
@@ -215,7 +215,7 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
 
-  test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
+  test.serial.skip(`Error.stackTraceLimit works | ${title}`, (t) => {
     const oldStackTraceLimit = Object.getOwnPropertyDescriptor(
       PonyfillAnyError,
       'stackTraceLimit',
@@ -270,7 +270,7 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.false(hasOwnProperty.call(PonyfillAnyError, 'stackTraceLimit'))
   })
 
-  test.serial.skip(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
+  test.serial(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
     // eslint-disable-next-line fp/no-mutation, no-param-reassign
     PonyfillAnyError.stackTraceLimit = 0
     const error = new PonyfillAnyError(...args)
