@@ -7,7 +7,6 @@ const PonyfillErrors = getErrors()
 defineAllTests(
   (name) => ({
     PonyfillAnyError: PonyfillErrors[name],
-    OriginalAnyError: globalThis[name],
   }),
   {
     PonyfillBaseError: PonyfillErrors.Error,

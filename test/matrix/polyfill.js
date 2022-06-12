@@ -15,7 +15,6 @@ polyfill()
 defineAllTests(
   (name) => ({
     PonyfillAnyError: globalThis[name],
-    OriginalAnyError: OriginalErrors[name],
   }),
   {
     PonyfillBaseError: globalThis.Error,

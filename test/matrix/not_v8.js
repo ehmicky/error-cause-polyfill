@@ -13,7 +13,6 @@ delete Error.captureStackTrace
 defineAllTests(
   (name) => ({
     PonyfillAnyError: globalThis[name],
-    OriginalAnyError: globalThis[name],
   }),
   {
     PonyfillBaseError: globalThis.Error,

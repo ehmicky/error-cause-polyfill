@@ -9,7 +9,6 @@ const supportsCause = hasSupport()
 defineAllTests(
   (name) => ({
     PonyfillAnyError: globalThis[name],
-    OriginalAnyError: globalThis[name],
   }),
   {
     PonyfillBaseError: globalThis.Error,

@@ -10,7 +10,6 @@ const undoPolyfill = polyfill()
 undoPolyfill()
 defineAllTests(
   (name) => ({
-    OriginalAnyError: OriginalErrors[name],
     PonyfillAnyError: globalThis[name],
   }),
   {
