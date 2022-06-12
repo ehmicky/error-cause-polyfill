@@ -7,17 +7,15 @@ import { defineTypeTests } from './type/main.js'
 const OriginalErrors = getOriginalErrors()
 
 // Run each test on each type of error
-export const defineAllTests = function (
-  getTypes,
-  { PonyfillBaseError, supportsCause },
-) {
+export const defineAllTests = function (PonyfillAnyErrors, supportsCause) {
   const OriginalBaseError = OriginalErrors.Error
+  const PonyfillBaseError = PonyfillAnyErrors.Error
 
   // eslint-disable-next-line fp/no-loops
   for (const name of ERROR_TYPES) {
     defineTests({
       name,
-      getTypes,
+      PonyfillAnyErrors,
       PonyfillBaseError,
       OriginalBaseError,
       supportsCause,
@@ -27,13 +25,13 @@ export const defineAllTests = function (
 
 const defineTests = function ({
   name,
-  getTypes,
+  PonyfillAnyErrors,
   PonyfillBaseError,
   OriginalBaseError,
   supportsCause,
 }) {
   const OriginalAnyError = OriginalErrors[name]
-  const { PonyfillAnyError } = getTypes(name)
+  const PonyfillAnyError = PonyfillAnyErrors[name]
   const { errors, message, cause, args } = getArgs(name)
 
   defineTypeTests({ title: name, PonyfillAnyError, OriginalAnyError, args })

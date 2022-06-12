@@ -6,12 +6,4 @@ import { defineAllTests } from '../helpers/tests/main.js'
 const supportsCause = hasSupport()
 const undoPolyfill = polyfill()
 undoPolyfill()
-defineAllTests(
-  (name) => ({
-    PonyfillAnyError: globalThis[name],
-  }),
-  {
-    PonyfillBaseError: globalThis.Error,
-    supportsCause,
-  },
-)
+defineAllTests(globalThis, supportsCause)

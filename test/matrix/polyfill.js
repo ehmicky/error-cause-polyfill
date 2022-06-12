@@ -10,12 +10,4 @@ import { defineAllTests } from '../helpers/tests/main.js'
 //  - Ava requires shared test logic (including tests themselves) to be in
 //    helpers
 polyfill()
-defineAllTests(
-  (name) => ({
-    PonyfillAnyError: globalThis[name],
-  }),
-  {
-    PonyfillBaseError: globalThis.Error,
-    supportsCause: true,
-  },
-)
+defineAllTests(globalThis, true)
