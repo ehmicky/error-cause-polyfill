@@ -176,7 +176,7 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
   })
 
-  test(`Error.captureStackTrace() has right descriptors | ${title}`, (t) => {
+  test.skip(`Error.captureStackTrace() has right descriptors | ${title}`, (t) => {
     t.deepEqual(
       Object.getOwnPropertyDescriptor(PonyfillAnyError, 'captureStackTrace'),
       {
@@ -188,7 +188,7 @@ const defineParBaseTypeTests = function ({
     )
   })
 
-  test(`Error.captureStackTrace() works | ${title}`, (t) => {
+  test.skip(`Error.captureStackTrace() works | ${title}`, (t) => {
     const error = {}
     PonyfillAnyError.captureStackTrace(error)
     t.true(error.stack.includes(`${PonyfillAnyError.name}\n`))
@@ -216,7 +216,7 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
 
-  test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
+  test.serial.skip(`Error.stackTraceLimit works | ${title}`, (t) => {
     const oldStackTraceLimit = Object.getOwnPropertyDescriptor(
       PonyfillAnyError,
       'stackTraceLimit',
@@ -250,18 +250,21 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.false(error.stack.includes(`${PonyfillAnyError.name}\n`))
   })
 
-  test(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
+  test.skip(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
     t.false('prepareStackTrace' in PonyfillAnyError)
   })
 
-  test.serial(`MiscError.prepareStackTrace() is a noop | ${title}`, (t) => {
-    const stack = 'testStack'
-    // eslint-disable-next-line fp/no-mutation, no-param-reassign
-    PonyfillAnyError.prepareStackTrace = () => stack
-    t.not(new PonyfillAnyError(...args).stack, stack)
-    // eslint-disable-next-line fp/no-delete, no-param-reassign
-    delete PonyfillAnyError.prepareStackTrace
-  })
+  test.serial.skip(
+    `MiscError.prepareStackTrace() is a noop | ${title}`,
+    (t) => {
+      const stack = 'testStack'
+      // eslint-disable-next-line fp/no-mutation, no-param-reassign
+      PonyfillAnyError.prepareStackTrace = () => stack
+      t.not(new PonyfillAnyError(...args).stack, stack)
+      // eslint-disable-next-line fp/no-delete, no-param-reassign
+      delete PonyfillAnyError.prepareStackTrace
+    },
+  )
 
   test(`MiscError.stackTraceLimit is present | ${title}`, (t) => {
     t.true('stackTraceLimit' in PonyfillAnyError)
@@ -271,7 +274,7 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.false(hasOwnProperty.call(PonyfillAnyError, 'stackTraceLimit'))
   })
 
-  test.serial(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
+  test.serial.skip(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
     // eslint-disable-next-line fp/no-mutation, no-param-reassign
     PonyfillAnyError.stackTraceLimit = 0
     const error = new PonyfillAnyError(...args)
