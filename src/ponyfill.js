@@ -1,10 +1,8 @@
 import { test } from './check.js'
-import { ORIGINAL_ERRORS } from './original.js'
+import { originalErrors } from './original.js'
 import { setNonEnumProp, setNonEnumReadonlyProp, setFrozenProp } from './set.js'
 import { proxyStaticProperties } from './static.js'
 import { ERROR_TYPES } from './types.js'
-
-const { Error: OriginalError } = ORIGINAL_ERRORS
 
 // Retrieve all ponyfill error types
 const getPonyfillErrors = function () {
@@ -37,7 +35,7 @@ const getPonyfillErrors = function () {
 //  - TODO: find from the automated tests which ones `error-cause` does not
 //    handle correctly
 const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
-  const OriginalAnyError = ORIGINAL_ERRORS[name]
+  const OriginalAnyError = originalErrors[name]
 
   if (test()) {
     return [name, OriginalAnyError]
@@ -82,8 +80,8 @@ const fixConstructor = function (
 //  - `new.target` is the function after un-binding, which is what
 //    `captureStackTrace()` needs
 const fixStack = function (error) {
-  if (OriginalError.captureStackTrace !== undefined) {
-    OriginalError.captureStackTrace(error, error.constructor)
+  if (originalErrors.Error.captureStackTrace !== undefined) {
+    originalErrors.Error.captureStackTrace(error, error.constructor)
   }
 }
 

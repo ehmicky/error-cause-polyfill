@@ -3,14 +3,7 @@ import assert from 'assert/strict'
 import { types } from 'util'
 
 import {
-  OriginalError,
-  OriginalReferenceError,
-  OriginalTypeError,
-  OriginalSyntaxError,
-  OriginalRangeError,
-  OriginalURIError,
-  OriginalEvalError,
-  OriginalAggregateError,
+  originalErrors,
   Error as PonyfillError,
   ReferenceError as PonyfillReferenceError,
   TypeError as PonyfillTypeError,
@@ -28,16 +21,22 @@ const mainErrorArgs = ['test']
 const aggregateErrorArgs = [[], 'test']
 
 const ALL_ERRORS = [
-  [OriginalError, PonyfillError, mainErrorArgs],
-  [OriginalReferenceError, PonyfillReferenceError, mainErrorArgs],
-  [OriginalTypeError, PonyfillTypeError, mainErrorArgs],
-  [OriginalSyntaxError, PonyfillSyntaxError, mainErrorArgs],
-  [OriginalRangeError, PonyfillRangeError, mainErrorArgs],
-  [OriginalURIError, PonyfillURIError, mainErrorArgs],
-  [OriginalEvalError, PonyfillEvalError, mainErrorArgs],
+  [originalErrors.Error, PonyfillError, mainErrorArgs],
+  [originalErrors.ReferenceError, PonyfillReferenceError, mainErrorArgs],
+  [originalErrors.TypeError, PonyfillTypeError, mainErrorArgs],
+  [originalErrors.SyntaxError, PonyfillSyntaxError, mainErrorArgs],
+  [originalErrors.RangeError, PonyfillRangeError, mainErrorArgs],
+  [originalErrors.URIError, PonyfillURIError, mainErrorArgs],
+  [originalErrors.EvalError, PonyfillEvalError, mainErrorArgs],
   ...(AggregateError === undefined
     ? []
-    : [[OriginalAggregateError, PonyfillAggregateError, aggregateErrorArgs]]),
+    : [
+        [
+          originalErrors.AggregateError,
+          PonyfillAggregateError,
+          aggregateErrorArgs,
+        ],
+      ]),
 ]
 
 // eslint-disable-next-line fp/no-loops
@@ -68,7 +67,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   })
 
   const originalAnyError = new OriginalAnyError(...errorArgs)
-  assert(originalAnyError instanceof OriginalError)
+  assert(originalAnyError instanceof originalErrors.Error)
   assert(originalAnyError instanceof PonyfillError)
   assert(originalAnyError instanceof OriginalAnyError)
   assert(originalAnyError instanceof PonyfillAnyError)
@@ -213,7 +212,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       Object.prototype.toString.call(ponyfillAnyError),
       '[object Error]',
     )
-    assert(ponyfillAnyError instanceof OriginalError)
+    assert(ponyfillAnyError instanceof originalErrors.Error)
     assert(ponyfillAnyError instanceof PonyfillError)
     assert(ponyfillAnyError instanceof OriginalAnyError)
     assert(ponyfillAnyError instanceof PonyfillAnyError)
@@ -264,7 +263,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   assert.equal(childError.toString(), `${childError.name}: test`)
   assert.equal(Object.prototype.toString.call(childError), '[object Error]')
-  assert(childError instanceof OriginalError)
+  assert(childError instanceof originalErrors.Error)
   assert(childError instanceof PonyfillError)
   assert(childError instanceof OriginalAnyError)
   assert(childError instanceof PonyfillAnyError)
@@ -297,7 +296,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 }
 
 const hasPolyfill = function () {
-  return globalThis.Error !== OriginalError
+  return globalThis.Error !== originalErrors.Error
 }
 
 const testWithoutPolyfill = test()
