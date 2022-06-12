@@ -22,20 +22,15 @@ const defineTests = function ({ name, args, getTypes }) {
   const message = 'test'
   const argsA = [...args, message]
   const typeKinds = getTypeKinds(PonyfillAnyError)
+
   const instanceKinds = getInstanceKinds(typeKinds, argsA)
-  instanceKinds.forEach(
-    ({ title, PonyfillAnyError: PonyfillAnyErrorA, error }) => {
-      const titleA = `| ${name} | ${title}`
-      defineInstanceTests({
-        title: titleA,
-        error,
-        PonyfillAnyError: PonyfillAnyErrorA,
-        PonyfillBaseError,
-        OriginalAnyError,
-        OriginalBaseError,
-      })
-    },
-  )
+  defineInstancesTests({
+    instanceKinds,
+    name,
+    PonyfillBaseError,
+    OriginalAnyError,
+    OriginalBaseError,
+  })
 }
 
 // Run each test on the ErrorType, but also a child and grand child of it.
@@ -85,6 +80,25 @@ const getInstanceKinds = function (
       error: new GrandChildError(...args),
     },
   ]
+}
+
+const defineInstancesTests = function ({
+  instanceKinds,
+  name,
+  PonyfillBaseError,
+  OriginalAnyError,
+  OriginalBaseError,
+}) {
+  instanceKinds.forEach(({ title, PonyfillAnyError, error }) => {
+    defineInstanceTests({
+      title: `| ${name} | ${title}`,
+      error,
+      PonyfillAnyError,
+      PonyfillBaseError,
+      OriginalAnyError,
+      OriginalBaseError,
+    })
+  })
 }
 
 const defineInstanceTests = function ({
