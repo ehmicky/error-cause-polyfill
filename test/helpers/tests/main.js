@@ -200,6 +200,27 @@ const defineParBaseTypeTests = function ({
     // eslint-disable-next-line fp/no-delete, no-param-reassign
     delete PonyfillAnyError.prepareStackTrace
   })
+
+  test(`Error.stackTraceLimit is same as original | ${title}`, (t) => {
+    t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
+  })
+
+  test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
+    const oldStackTraceLimit = Object.getOwnPropertyDescriptor(
+      PonyfillAnyError,
+      'stackTraceLimit',
+    )
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.stackTraceLimit = 0
+    const error = new PonyfillAnyError(...args)
+    t.is(error.stack, `${error.name}: ${error.message}`)
+    // eslint-disable-next-line fp/no-mutating-methods
+    Object.defineProperty(
+      PonyfillAnyError,
+      'stackTraceLimit',
+      oldStackTraceLimit,
+    )
+  })
 }
 
 // Tests run only on the parent Type, if not "Error"
@@ -229,6 +250,23 @@ const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
     t.not(new PonyfillAnyError(...args).stack, stack)
     // eslint-disable-next-line fp/no-delete, no-param-reassign
     delete PonyfillAnyError.prepareStackTrace
+  })
+
+  test(`MiscError.stackTraceLimit is present | ${title}`, (t) => {
+    t.true('stackTraceLimit' in PonyfillAnyError)
+  })
+
+  test(`MiscError.stackTraceLimit is inherited | ${title}`, (t) => {
+    t.false(hasOwnProperty.call(PonyfillAnyError, 'stackTraceLimit'))
+  })
+
+  test.serial(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.stackTraceLimit = 0
+    const error = new PonyfillAnyError(...args)
+    t.true(error.stack.includes('at '))
+    // eslint-disable-next-line fp/no-delete, no-param-reassign
+    delete PonyfillAnyError.stackTraceLimit
   })
 }
 

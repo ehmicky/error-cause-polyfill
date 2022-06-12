@@ -24,19 +24,15 @@ const ALL_ERRORS = [
 // eslint-disable-next-line fp/no-loops
 for (const [OriginalAnyError, PonyfillAnyError] of ALL_ERRORS) {
   if (OriginalAnyError.name === 'Error') {
-    assert.notEqual(PonyfillAnyError.stackTraceLimit, undefined)
-
-    if (PonyfillAnyError.stackTraceLimit !== undefined) {
-      const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
-      // eslint-disable-next-line fp/no-mutation
-      PonyfillAnyError.stackTraceLimit = 0
-      assert.equal(
-        new PonyfillAnyError('').stack,
-        PonyfillAnyError.prototype.name,
-      )
-      // eslint-disable-next-line fp/no-mutation
-      PonyfillAnyError.stackTraceLimit = oldStackTraceLimit
-    }
+    const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
+    // eslint-disable-next-line fp/no-mutation
+    PonyfillAnyError.stackTraceLimit = 0
+    assert.equal(
+      new PonyfillAnyError('').stack,
+      PonyfillAnyError.prototype.name,
+    )
+    // eslint-disable-next-line fp/no-mutation
+    PonyfillAnyError.stackTraceLimit = oldStackTraceLimit
   }
 }
 
