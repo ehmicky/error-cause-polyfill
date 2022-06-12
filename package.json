@@ -2,7 +2,10 @@
   "name": "error-cause-polyfill",
   "version": "1.0.0",
   "type": "module",
-  "exports": "./build/src/main.js",
+  "exports": {
+    ".": "./build/src/main.js",
+    "./auto": "./build/src/auto.js"
+  },
   "main": "./build/src/main.js",
   "types": "./build/src/main.d.ts",
   "files": [
