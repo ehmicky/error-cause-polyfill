@@ -23,31 +23,6 @@ const ALL_ERRORS = [
 
 // eslint-disable-next-line fp/no-loops
 for (const [OriginalAnyError, PonyfillAnyError] of ALL_ERRORS) {
-  // eslint-disable-next-line fp/no-class
-  class TestError extends PonyfillAnyError {
-    // eslint-disable-next-line no-useless-constructor, unicorn/custom-error-definition
-    constructor(...args) {
-      super(...args)
-    }
-  }
-  // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(TestError.prototype, 'name', {
-    value: TestError.name,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
-
-  // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
-  class ChildError extends TestError {}
-  // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(ChildError.prototype, 'name', {
-    value: ChildError.name,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
-
   assert.notEqual(PonyfillAnyError.captureStackTrace, undefined)
 
   if (PonyfillAnyError.captureStackTrace !== undefined) {
