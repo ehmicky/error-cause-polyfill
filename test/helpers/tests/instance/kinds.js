@@ -24,7 +24,7 @@ export const getInstanceKinds = function (PonyfillAnyError, args) {
 }
 
 const getChildError = function (ParentError) {
-  // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
+  // eslint-disable-next-line fp/no-class
   class ChildError extends ParentError {}
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(ChildError.prototype, 'name', {
