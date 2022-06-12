@@ -1,7 +1,7 @@
 import test from 'ava'
 import { polyfill, hasSupport } from 'error-cause-polyfill'
 // eslint-disable-next-line n/file-extension-in-import
-import OtherPolyfillError from 'error-cause/Error/implementation'
+import OtherPolyfillTypeError from 'error-cause/TypeError/implementation'
 
 import { getOriginalErrors } from './helpers/types.js'
 
@@ -44,27 +44,28 @@ test.serial('polyfill() can be done twice', (t) => {
 })
 
 test.serial('Can polyfill after another polyfill', (t) => {
-  t.is(Error, originalErrors.Error)
+  t.is(globalThis.TypeError, originalErrors.TypeError)
   setOtherPolyfill()
-  t.is(Error, OtherPolyfillError)
+  t.is(globalThis.TypeError, OtherPolyfillTypeError)
   const undoPolyfill = polyfill()
+  t.is(globalThis.TypeError === OtherPolyfillTypeError, supportsCause)
   undoPolyfill()
-  t.is(Error, OtherPolyfillError)
+  t.is(globalThis.TypeError, OtherPolyfillTypeError)
   unsetOtherPolyfill()
-  t.is(Error, originalErrors.Error)
+  t.is(globalThis.TypeError, originalErrors.TypeError)
 })
 
 const setOtherPolyfill = function () {
-  setGlobalError(OtherPolyfillError)
+  setGlobalTypeError(OtherPolyfillTypeError)
 }
 
 const unsetOtherPolyfill = function () {
-  setGlobalError(originalErrors.Error)
+  setGlobalTypeError(originalErrors.TypeError)
 }
 
-const setGlobalError = function (value) {
+const setGlobalTypeError = function (value) {
   // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(globalThis, 'Error', {
+  Object.defineProperty(globalThis, 'TypeError', {
     value,
     writable: true,
     enumerable: false,
