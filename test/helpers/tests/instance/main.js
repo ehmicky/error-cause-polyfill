@@ -31,6 +31,7 @@ export const defineInstancesTests = function ({
         errors,
         message,
         cause,
+        args,
       })
     },
   )
@@ -48,6 +49,7 @@ const defineInstanceTests = function ({
   errors,
   message,
   cause,
+  args,
 }) {
   defineInstanceProtoTests({
     title,
@@ -67,6 +69,7 @@ const defineInstanceTests = function ({
     errors,
     message,
     cause,
+    args,
   })
 
   defineInstanceMiscTests({ title, error, PonyfillAnyError })

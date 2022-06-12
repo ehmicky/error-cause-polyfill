@@ -15,10 +15,18 @@ export const defineInstancePropsTests = function ({
   errors,
   message,
   cause,
+  args,
 }) {
   defineNameTests(title, error, PonyfillAnyError)
   defineMessageTests(title, error, message)
   defineStackTests(title, error, OriginalAnyError)
-  defineCauseTests({ title, error, supportsCause, cause })
+  defineCauseTests({
+    title,
+    error,
+    PonyfillAnyError,
+    supportsCause,
+    cause,
+    args,
+  })
   defineErrorsTests({ title, error, errors, PonyfillAnyError })
 }

@@ -5,8 +5,10 @@ import test from 'ava'
 export const defineCauseTests = function ({
   title,
   error,
+  PonyfillAnyError,
   supportsCause,
   cause,
+  args,
 }) {
   test(`error.cause is patched | ${title}`, (t) => {
     t.is(error.cause === cause, supportsCause)
@@ -24,5 +26,15 @@ export const defineCauseTests = function ({
           }
         : undefined,
     )
+  })
+
+  test(`error.cause can be a function | ${title}`, (t) => {
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    const func = function () {}
+    // eslint-disable-next-line fp/no-mutation
+    func.cause = cause
+    const argsA = [...args.slice(0, -1), func]
+    const errorA = new PonyfillAnyError(...argsA)
+    t.is(errorA.cause === cause, supportsCause)
   })
 }

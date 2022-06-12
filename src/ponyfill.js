@@ -131,10 +131,16 @@ const fixCause = function (error, options) {
 
 const isMissingCause = function (error, options) {
   return (
-    typeof options === 'object' &&
-    options !== null &&
+    isOptionsObject(options) &&
     'cause' in options &&
     options.cause !== error.cause
+  )
+}
+
+const isOptionsObject = function (options) {
+  return (
+    (typeof options === 'object' || typeof options === 'function') &&
+    options !== null
   )
 }
 
