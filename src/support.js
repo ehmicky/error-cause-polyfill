@@ -1,6 +1,5 @@
 // Returns whether `error.cause` is supported.
 export const hasSupport = function () {
-  const symbol = Symbol('')
-  const error = new Error('test', { cause: symbol })
-  return error.cause === symbol
+  const cause = Symbol('')
+  return new Error('test', { cause }).cause === cause
 }
