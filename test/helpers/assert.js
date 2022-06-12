@@ -114,11 +114,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
         },
       )
     }
-
-    assert.equal(
-      Object.prototype.toString.call(ponyfillAnyError),
-      '[object Error]',
-    )
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
@@ -133,7 +128,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     })
   }
 
-  assert.equal(Object.prototype.toString.call(childError), '[object Error]')
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
 
