@@ -15,24 +15,24 @@
   "keywords": [
     "nodejs",
     "javascript",
+    "polyfill",
     "stacktrace",
     "library",
     "typescript",
     "browser",
     "errors",
-    "monitoring",
     "error-monitoring",
+    "ecmascript",
     "message",
     "error-handler",
-    "properties",
     "error-handling",
     "error",
+    "exceptions",
+    "ponyfill",
     "code-quality",
+    "shim",
     "cause",
-    "error-reporting",
-    "error-type",
-    "merge",
-    "exceptions"
+    "aggregateerror"
   ],
   "license": "Apache-2.0",
   "homepage": "https://bit.ly/3HvEiON",
@@ -45,8 +45,7 @@
     "lib": "src",
     "test": "test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@ehmicky/dev-tasks": "^1.0.76",
     "test-each": "^5.0.0",
