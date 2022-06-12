@@ -9,6 +9,7 @@ export const defineInstancePropsTests = function ({
   title,
   error,
   PonyfillAnyError,
+  OriginalAnyError,
   supportsCause,
   errors,
   message,
@@ -16,7 +17,7 @@ export const defineInstancePropsTests = function ({
 }) {
   defineNameTests(title, error, PonyfillAnyError)
   defineMessageTests(title, error, message)
-  defineStackTests(title, error)
+  defineStackTests(title, error, OriginalAnyError)
   defineCauseTests({ title, error, supportsCause, cause })
   defineErrorsTests({ title, error, errors, PonyfillAnyError })
 }
@@ -62,11 +63,23 @@ const defineMessageTests = function (title, error, message) {
 }
 
 // Tests run on the parent and child error instances, related to `error.stack`
-const defineStackTests = function (title, error) {
-  test(`error.stack is correct | ${title}`, (t) => {
+const defineStackTests = function (title, error, OriginalAnyError) {
+  test(`error.stack includes name and message | ${title}`, (t) => {
     t.true(error.stack.includes(error.toString()))
+  })
+
+  test(`error.stack includes stack trace | ${title}`, (t) => {
     t.true(error.stack.includes('at '))
     t.true(error.stack.includes('helpers/'))
+  })
+
+  test(`error.stack does not include this library's internal code | ${title}`, (t) => {
+    const lines = error.stack.split('\n')
+    const firstLineIndex = lines.findIndex(isStackLine)
+    t.true(
+      lines[firstLineIndex].includes('getInstanceKinds') ||
+        !('captureStackTrace' in OriginalAnyError),
+    )
   })
 
   test(`error.stack has right descriptors | ${title}`, (t) => {
@@ -77,6 +90,10 @@ const defineStackTests = function (title, error) {
       configurable: true,
     })
   })
+}
+
+const isStackLine = function (line) {
+  return line.trim().startsWith('at ')
 }
 
 // Tests run on the parent and child error instances, related to `error.cause`

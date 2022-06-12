@@ -62,6 +62,7 @@ const defineInstanceTests = function ({
     title,
     error,
     PonyfillAnyError,
+    OriginalAnyError,
     supportsCause,
     errors,
     message,
