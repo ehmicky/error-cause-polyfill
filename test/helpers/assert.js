@@ -5,33 +5,24 @@ import { getErrors, test, polyfill } from 'error-cause-polyfill'
 
 import { getOriginalErrors } from './types.js'
 
-const mainErrorArgs = ['test']
-const aggregateErrorArgs = [[], 'test']
-
 const OriginalErrors = getOriginalErrors()
 const PonyfillErrors = getErrors()
 
 const ALL_ERRORS = [
-  [OriginalErrors.Error, PonyfillErrors.Error, mainErrorArgs],
-  [OriginalErrors.ReferenceError, PonyfillErrors.ReferenceError, mainErrorArgs],
-  [OriginalErrors.TypeError, PonyfillErrors.TypeError, mainErrorArgs],
-  [OriginalErrors.SyntaxError, PonyfillErrors.SyntaxError, mainErrorArgs],
-  [OriginalErrors.RangeError, PonyfillErrors.RangeError, mainErrorArgs],
-  [OriginalErrors.URIError, PonyfillErrors.URIError, mainErrorArgs],
-  [OriginalErrors.EvalError, PonyfillErrors.EvalError, mainErrorArgs],
+  [OriginalErrors.Error, PonyfillErrors.Error],
+  [OriginalErrors.ReferenceError, PonyfillErrors.ReferenceError],
+  [OriginalErrors.TypeError, PonyfillErrors.TypeError],
+  [OriginalErrors.SyntaxError, PonyfillErrors.SyntaxError],
+  [OriginalErrors.RangeError, PonyfillErrors.RangeError],
+  [OriginalErrors.URIError, PonyfillErrors.URIError],
+  [OriginalErrors.EvalError, PonyfillErrors.EvalError],
   ...(AggregateError === undefined
     ? []
-    : [
-        [
-          OriginalErrors.AggregateError,
-          PonyfillErrors.AggregateError,
-          aggregateErrorArgs,
-        ],
-      ]),
+    : [[OriginalErrors.AggregateError, PonyfillErrors.AggregateError]]),
 ]
 
 // eslint-disable-next-line fp/no-loops
-for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
+for (const [OriginalAnyError, PonyfillAnyError] of ALL_ERRORS) {
   // eslint-disable-next-line fp/no-class
   class TestError extends PonyfillAnyError {
     // eslint-disable-next-line no-useless-constructor, unicorn/custom-error-definition
@@ -85,15 +76,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     assert.equal(new PonyfillAnyError('').stack, 'stack')
     // eslint-disable-next-line fp/no-mutation
     PonyfillAnyError.prepareStackTrace = undefined
-  }
-
-  if (OriginalAnyError.name === 'Error') {
-    // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(new OriginalAnyError(...errorArgs, { cause: 1 }))
-    // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(new PonyfillAnyError(...errorArgs, { cause: 1 }))
-    // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(new ChildError(...errorArgs, { cause: 1 }))
   }
 }
 
