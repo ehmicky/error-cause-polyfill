@@ -30,6 +30,10 @@ const defineBaseTypeLimitTests = function ({
     return
   }
 
+  test(`Error.stackTraceLimit is enumerable | ${title}`, (t) => {
+    t.true(isEnum.call(PonyfillAnyError, 'stackTraceLimit'))
+  })
+
   test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
     const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
     // eslint-disable-next-line fp/no-mutation, no-param-reassign

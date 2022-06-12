@@ -33,6 +33,15 @@ import { ERROR_TYPES } from './types.js'
 //  - This means an `undefined` `cause` was present on `new Error()`
 //  - We do not fix this since it was only present in those 2 versions and was
 //   fixed quickly
+// List of differences with native behavior:
+//  - medium:
+//     - `error.__proto__.constructor` is set as `error.constructor` instead
+//     - The global `Error` is re-set, i.e. any previous reference to it will be
+//       !== new value
+//     - `Error.stackTraceLimit|captureStackTrace|prepareStackTrace()` are a
+//       `get|set` property that proxies to underlying `Error.*`
+//  - minor:
+//     - `Error.toString()` does not return `function Error() { [native code] }`
 // Issues with error-cause:
 //  - Package size is too big
 //  - Does not support child error types

@@ -50,6 +50,12 @@ export const defineInstancePropsTests = function ({
     })
   })
 
+  test(`error.stack is correct | ${title}`, (t) => {
+    t.true(error.stack.includes(error.toString()))
+    t.true(error.stack.includes('at '))
+    t.true(error.stack.includes('helpers/'))
+  })
+
   test(`error.stack has right descriptors | ${title}`, (t) => {
     t.deepEqual(Object.getOwnPropertyDescriptor(error, 'stack'), {
       value: error.stack,
