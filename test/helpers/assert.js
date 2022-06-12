@@ -97,23 +97,19 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     PonyfillAnyError.prepareStackTrace = undefined
   }
 
-  const ponyfillAnyErrorOne = new PonyfillAnyError(...errorArgs, { cause: 1 })
-  const ponyfillAnyErrorTwo = PonyfillAnyError(...errorArgs, { cause: 1 })
+  const ponyfillAnyError = new PonyfillAnyError(...errorArgs, { cause: 1 })
 
-  // eslint-disable-next-line fp/no-loops
-  for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
-    if (ponyfillAnyError.name === 'AggregateError') {
-      assert(Array.isArray(ponyfillAnyError.errors))
-      assert.deepEqual(
-        Object.getOwnPropertyDescriptor(ponyfillAnyError, 'errors'),
-        {
-          value: ponyfillAnyError.errors,
-          writable: true,
-          enumerable: false,
-          configurable: true,
-        },
-      )
-    }
+  if (ponyfillAnyError.name === 'AggregateError') {
+    assert(Array.isArray(ponyfillAnyError.errors))
+    assert.deepEqual(
+      Object.getOwnPropertyDescriptor(ponyfillAnyError, 'errors'),
+      {
+        value: ponyfillAnyError.errors,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      },
+    )
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
@@ -137,7 +133,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     // eslint-disable-next-line no-console, no-restricted-globals
     console.log(originalAnyError)
     // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(ponyfillAnyErrorOne)
+    console.log(ponyfillAnyError)
     // eslint-disable-next-line no-console, no-restricted-globals
     console.log(childError)
   }
