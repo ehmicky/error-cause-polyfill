@@ -32,12 +32,19 @@ import { ERROR_TYPES } from './types.js'
 //  - We do not fix this since it was only present in those 2 versions and was
 //    fixed quickly
 // List of differences with native behavior:
+//  - major:
+//     - `error.stack` includes the polyfill internal code, when not in V8
+//       (Node.js, Chrome)
+//        - when using a subclass, it also includes the subclass constructor
 //  - medium:
 //     - `error.__proto__.constructor` is set as `error.constructor` instead
 //     - The global `Error` is re-set, i.e. any previous reference to it will be
 //       !== new value
+//        - However, `instanceof` works correctly, in both directions
 //     - `Error.stackTraceLimit|captureStackTrace|prepareStackTrace()` are a
 //       `get|set` property that proxies to underlying `Error.*`
+//     - `Error.__proto__` is original `Error` (not `Object`), and
+//       `Error.__proto__.__proto__` is `Object`
 //  - minor:
 //     - `Error.toString()` does not return `function Error() { [native code] }`
 // Issues with error-cause:
