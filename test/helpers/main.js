@@ -214,6 +214,15 @@ const defineInstanceTests = function ({
     t.true(hasOwn.call(Object.getPrototypeOf(error), 'name'))
   })
 
+  test(`error.name has right descriptors | ${title}`, (t) => {
+    t.deepEqual(getPropertyDescriptor(Object.getPrototypeOf(error), 'name'), {
+      value: error.name,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    })
+  })
+
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
   })
