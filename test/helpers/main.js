@@ -103,4 +103,8 @@ const defineTestsSeries = function ({
   test(`__proto__ is constructor's prototype ${title}`, (t) => {
     t.is(Object.getPrototypeOf(error), PonyfillAnyError.prototype)
   })
+
+  test(`constructor is correct ${title}`, (t) => {
+    t.is(error.constructor, PonyfillAnyError)
+  })
 }
