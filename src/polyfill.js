@@ -1,5 +1,5 @@
 import { test } from './check.js'
-import { originalErrors } from './original.js'
+import { OriginalErrors } from './original.js'
 import { PONYFILL_ERRORS } from './ponyfill.js'
 import { setNonEnumProp } from './set.js'
 import { ERROR_TYPES } from './types.js'
@@ -27,15 +27,15 @@ export const undoPolyfill = function () {
 }
 
 const undoPolyfillErrorType = function ({ name }) {
-  setNonEnumProp(globalThis, name, originalErrors[name])
+  setNonEnumProp(globalThis, name, OriginalErrors[name])
 }
 
 // Check whether this polyfill has already been used.
 // If another `Error` polyfill is applied since this library was loaded,
-// `originalErrors` will miss it
+// `OriginalErrors` will miss it
 //   - i.e. applying this polyfill would remove the other polyfill
 //   - Therefore, this becomes a noop
 // TODO: improve this so it is not a noop
 const hasPolyfill = function () {
-  return globalThis.Error !== originalErrors.Error
+  return globalThis.Error !== OriginalErrors.Error
 }

@@ -1,6 +1,6 @@
 import { PONYFILL_ERRORS } from './ponyfill.js'
 
-export { originalErrors } from './original.js'
+export { OriginalErrors } from './original.js'
 export { polyfill, undoPolyfill } from './polyfill.js'
 export { test } from './check.js'
 

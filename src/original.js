@@ -8,4 +8,4 @@ const getOriginalAnyError = function ({ name }) {
   return [name, globalThis[name]]
 }
 
-export const originalErrors = getOriginalErrors()
+export const OriginalErrors = getOriginalErrors()
