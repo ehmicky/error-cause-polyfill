@@ -1,14 +1,15 @@
-import { polyfill, undoPolyfill } from 'error-cause-polyfill'
+import { polyfill } from 'error-cause-polyfill'
 
 import { defineAllTests } from './helpers/main.js'
 import { getOriginalErrors } from './helpers/types.js'
 
 // Run tests with the Error types after polyfill() then undoPolyfill()
 const OriginalErrors = getOriginalErrors()
-polyfill()
+const undoPolyfill = polyfill()
 undoPolyfill()
 defineAllTests((name) => ({
-  ErrorType: globalThis[name],
+  PonyfillAnyError: globalThis[name],
+  PonyfillBaseError: globalThis.Error,
   OriginalAnyError: OriginalErrors[name],
   OriginalBaseError: OriginalErrors.Error,
 }))

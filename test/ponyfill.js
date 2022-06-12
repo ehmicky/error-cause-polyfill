@@ -1,10 +1,12 @@
-import { Errors } from 'error-cause-polyfill'
+import { getErrors } from 'error-cause-polyfill'
 
 import { defineAllTests } from './helpers/main.js'
 
 // Run tests with the Error types with the ponyfills
+const PonyfillErrors = getErrors()
 defineAllTests((name) => ({
-  ErrorType: Errors[name],
+  PonyfillAnyError: PonyfillErrors[name],
+  PonyfillBaseError: PonyfillErrors.Error,
   OriginalAnyError: globalThis[name],
   OriginalBaseError: globalThis.Error,
 }))

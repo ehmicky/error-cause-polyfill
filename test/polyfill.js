@@ -13,7 +13,8 @@ import { getOriginalErrors } from './helpers/types.js'
 const OriginalErrors = getOriginalErrors()
 polyfill()
 defineAllTests((name) => ({
-  ErrorType: globalThis[name],
+  PonyfillAnyError: globalThis[name],
+  PonyfillBaseError: globalThis.Error,
   OriginalAnyError: OriginalErrors[name],
   OriginalBaseError: OriginalErrors.Error,
 }))

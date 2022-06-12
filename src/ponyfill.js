@@ -1,14 +1,17 @@
 import { test } from './check.js'
-import { OriginalErrors } from './original.js'
 import { setNonEnumProp, setNonEnumReadonlyProp, setFrozenProp } from './set.js'
 import { proxyStaticProperties } from './static.js'
 import { ERROR_TYPES } from './types.js'
 
-// Retrieve all ponyfill error types
-const getPonyfillErrors = function () {
-  return Object.fromEntries(ERROR_TYPES.map(getPonyfillAnyError))
-}
-
+// Retrieve all ponyfill error types.
+// In order to make it work with any `Error` polyfills (e.g. `AggregateError`
+// or another `error.cause` polyfill):
+//  - `getErrors()` is computed on-demand, not on load
+//     - This allows users to have a clear order where each polyfill|ponyfill
+//       is applied
+//  - The current global types (potentially already patched by another library):
+//     - Are considered the "original" ones
+//     - Are cached in case they were to change
 // The ponyfilled error types reference the original error types, so are not
 // impacted by any other similar ponyfill being applied later.
 // We create the error instance as `new OriginalAnyError(...)` then return it.
@@ -34,8 +37,13 @@ const getPonyfillErrors = function () {
 //  - Does not support child error types
 //  - TODO: find from the automated tests which ones `error-cause` does not
 //    handle correctly
+export const getErrors = function () {
+  return Object.fromEntries(ERROR_TYPES.map(getPonyfillAnyError))
+}
+
 const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
-  const OriginalAnyError = OriginalErrors[name]
+  const OriginalAnyError = globalThis[name]
+  const OriginalBaseError = globalThis.Error
 
   if (test()) {
     return [name, OriginalAnyError]
@@ -45,7 +53,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
     const error = new OriginalAnyError(...args)
     const newTarget = new.target
     fixConstructor(error, PonyfillAnyError, newTarget)
-    fixStack(error)
+    fixStack(error, OriginalBaseError)
     fixInstancePrototype(error, newTarget)
     fixCause(error, args[argsLength])
     return error
@@ -79,9 +87,9 @@ const fixConstructor = function (
 //  - In that case, `new.target` will be used
 //  - `new.target` is the function after un-binding, which is what
 //    `captureStackTrace()` needs
-const fixStack = function (error) {
-  if (OriginalErrors.Error.captureStackTrace !== undefined) {
-    OriginalErrors.Error.captureStackTrace(error, error.constructor)
+const fixStack = function (error, OriginalBaseError) {
+  if (OriginalBaseError.captureStackTrace !== undefined) {
+    OriginalBaseError.captureStackTrace(error, error.constructor)
   }
 }
 
@@ -147,5 +155,3 @@ const fixType = function ({
   Object.setPrototypeOf(PonyfillAnyError, OriginalAnyError)
   proxyStaticProperties(PonyfillAnyError, OriginalAnyError, shouldProxy)
 }
-
-export const Errors = getPonyfillErrors()

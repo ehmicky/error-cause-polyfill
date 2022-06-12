@@ -2,7 +2,7 @@
 import assert from 'assert/strict'
 import { types } from 'util'
 
-import { Errors, test, polyfill, undoPolyfill } from 'error-cause-polyfill'
+import { getErrors, test, polyfill } from 'error-cause-polyfill'
 
 import { getOriginalErrors } from './types.js'
 
@@ -10,21 +10,22 @@ const mainErrorArgs = ['test']
 const aggregateErrorArgs = [[], 'test']
 
 const OriginalErrors = getOriginalErrors()
+const PonyfillErrors = getErrors()
 
 const ALL_ERRORS = [
-  [OriginalErrors.Error, Errors.Error, mainErrorArgs],
-  [OriginalErrors.ReferenceError, Errors.ReferenceError, mainErrorArgs],
-  [OriginalErrors.TypeError, Errors.TypeError, mainErrorArgs],
-  [OriginalErrors.SyntaxError, Errors.SyntaxError, mainErrorArgs],
-  [OriginalErrors.RangeError, Errors.RangeError, mainErrorArgs],
-  [OriginalErrors.URIError, Errors.URIError, mainErrorArgs],
-  [OriginalErrors.EvalError, Errors.EvalError, mainErrorArgs],
+  [OriginalErrors.Error, PonyfillErrors.Error, mainErrorArgs],
+  [OriginalErrors.ReferenceError, PonyfillErrors.ReferenceError, mainErrorArgs],
+  [OriginalErrors.TypeError, PonyfillErrors.TypeError, mainErrorArgs],
+  [OriginalErrors.SyntaxError, PonyfillErrors.SyntaxError, mainErrorArgs],
+  [OriginalErrors.RangeError, PonyfillErrors.RangeError, mainErrorArgs],
+  [OriginalErrors.URIError, PonyfillErrors.URIError, mainErrorArgs],
+  [OriginalErrors.EvalError, PonyfillErrors.EvalError, mainErrorArgs],
   ...(AggregateError === undefined
     ? []
     : [
         [
           OriginalErrors.AggregateError,
-          Errors.AggregateError,
+          PonyfillErrors.AggregateError,
           aggregateErrorArgs,
         ],
       ]),
@@ -271,8 +272,8 @@ const hasPolyfill = function () {
 
 const testWithoutPolyfill = test()
 assert(!hasPolyfill())
-polyfill()
-assert.notEqual(hasPolyfill(), testWithoutPolyfill)
+const undoPolyfill = polyfill()
+assert.equal(!hasPolyfill(), testWithoutPolyfill)
 assert(test())
 undoPolyfill()
 assert(!hasPolyfill())

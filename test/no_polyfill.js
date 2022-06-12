@@ -2,7 +2,8 @@ import { defineAllTests } from './helpers/main.js'
 
 // Run tests with the Error types without any polyfill nor ponyfill
 defineAllTests((name) => ({
-  ErrorType: globalThis[name],
+  PonyfillAnyError: globalThis[name],
+  PonyfillBaseError: globalThis.Error,
   OriginalAnyError: globalThis[name],
   OriginalBaseError: globalThis.Error,
 }))

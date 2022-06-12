@@ -1,6 +1,5 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
-import { Errors } from 'error-cause-polyfill'
 
 import { ERROR_TYPES } from './types.js'
 
@@ -13,16 +12,22 @@ export const defineAllTests = function (getTypes) {
 }
 
 const defineTests = function ({ name, args, getTypes }) {
-  const { ErrorType, OriginalAnyError, OriginalBaseError } = getTypes(name)
+  const {
+    PonyfillAnyError,
+    PonyfillBaseError,
+    OriginalAnyError,
+    OriginalBaseError,
+  } = getTypes(name)
   const message = 'test'
   const argsA = [...args, message]
-  const kinds = getKinds(ErrorType, argsA)
-  kinds.forEach(({ title, AnyError, error }) => {
+  const kinds = getKinds(PonyfillAnyError, argsA)
+  kinds.forEach(({ title, PonyfillAnyError: PonyfillAnyErrorA, error }) => {
     const titleA = `| ${name} | ${title}`
     defineTestsSeries({
       title: titleA,
       error,
-      AnyError,
+      PonyfillAnyError: PonyfillAnyErrorA,
+      PonyfillBaseError,
       OriginalAnyError,
       OriginalBaseError,
     })
@@ -31,28 +36,28 @@ const defineTests = function ({ name, args, getTypes }) {
 
 // Run each test on the ErrorType, but also a child and grand child of it.
 // Also run with and without `new` for the base type.
-const getKinds = function (ErrorType, args) {
-  const ChildError = getChildError(ErrorType)
+const getKinds = function (PonyfillAnyError, args) {
+  const ChildError = getChildError(PonyfillAnyError)
   const GrandChildError = getChildError(ChildError)
   return [
     {
       title: 'NewErrorType',
-      AnyError: ErrorType,
-      error: new ErrorType(...args),
+      PonyfillAnyError,
+      error: new PonyfillAnyError(...args),
     },
     {
       title: 'BareErrorType',
-      AnyError: ErrorType,
-      error: ErrorType(...args),
+      PonyfillAnyError,
+      error: PonyfillAnyError(...args),
     },
     {
       title: 'ChildError',
-      AnyError: ChildError,
+      PonyfillAnyError: ChildError,
       error: new ChildError(...args),
     },
     {
       title: 'GrandChildError',
-      AnyError: GrandChildError,
+      PonyfillAnyError: GrandChildError,
       error: new GrandChildError(...args),
     },
   ]
@@ -74,7 +79,8 @@ const getChildError = function (ParentError) {
 const defineTestsSeries = function ({
   title,
   error,
-  AnyError,
+  PonyfillAnyError,
+  PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
 }) {
@@ -82,19 +88,19 @@ const defineTestsSeries = function ({
     t.true(error instanceof OriginalBaseError)
   })
 
-  test(`Is instance of polyfill base Error ${title}`, (t) => {
-    t.true(error instanceof Errors.Error)
+  test(`Is instance of ponyfill base Error ${title}`, (t) => {
+    t.true(error instanceof PonyfillBaseError)
   })
 
   test(`Is instance of original Error ${title}`, (t) => {
     t.true(error instanceof OriginalAnyError)
   })
 
-  test(`Is instance of polyfill Error ${title}`, (t) => {
-    t.true(error instanceof AnyError)
+  test(`Is instance of ponyfill Error ${title}`, (t) => {
+    t.true(error instanceof PonyfillAnyError)
   })
 
   test(`__proto__ is constructor's prototype ${title}`, (t) => {
-    t.is(Object.getPrototypeOf(error), AnyError.prototype)
+    t.is(Object.getPrototypeOf(error), PonyfillAnyError.prototype)
   })
 }

@@ -1,41 +1,47 @@
 import { test } from './check.js'
-import { OriginalErrors } from './original.js'
-import { Errors } from './ponyfill.js'
+import { getErrors } from './ponyfill.js'
 import { setNonEnumProp } from './set.js'
-import { ERROR_TYPES } from './types.js'
 
 // Monkey patches the global object, i.e. polyfills it.
+// If another polyfill was applied on global Error types before `polyfill()`
+// was called, it will be kept.
+// Idempotent.
 export const polyfill = function () {
-  if (hasPolyfill() || test()) {
+  if (test()) {
+    return noop
+  }
+
+  const PonyfillErrors = getErrors()
+  const OriginalErrors = Object.fromEntries(
+    Object.entries(PonyfillErrors).map(getOriginalAnyError),
+  )
+  Object.entries(PonyfillErrors).forEach(polyfillErrorType)
+  return undoPolyfill.bind(undefined, OriginalErrors)
+}
+
+// eslint-disable-next-line no-empty-function
+const noop = function () {}
+
+const getOriginalAnyError = function ([name]) {
+  return [name, globalThis[name]]
+}
+
+const polyfillErrorType = function ([name, PonyfillAnyError]) {
+  setNonEnumProp(globalThis, name, PonyfillAnyError)
+}
+
+// `polyfill()` returns a function to undo.
+// If another polyfill was applied on global Error types since `polyfill()`
+// was called, it will be undone too.
+// Idempotent.
+const undoPolyfill = function (OriginalErrors) {
+  if (globalThis.Error === OriginalErrors.Error) {
     return
   }
 
-  ERROR_TYPES.forEach(polyfillErrorType)
+  Object.entries(OriginalErrors).forEach(undoPolyfillErrorType)
 }
 
-const polyfillErrorType = function ({ name }) {
-  setNonEnumProp(globalThis, name, Errors[name])
-}
-
-// Undo `polyfill()`
-export const undoPolyfill = function () {
-  if (!hasPolyfill()) {
-    return
-  }
-
-  ERROR_TYPES.forEach(undoPolyfillErrorType)
-}
-
-const undoPolyfillErrorType = function ({ name }) {
-  setNonEnumProp(globalThis, name, OriginalErrors[name])
-}
-
-// Check whether this polyfill has already been used.
-// If another `Error` polyfill is applied since this library was loaded,
-// `OriginalErrors` will miss it
-//   - i.e. applying this polyfill would remove the other polyfill
-//   - Therefore, this becomes a noop
-// TODO: improve this so it is not a noop
-const hasPolyfill = function () {
-  return globalThis.Error !== OriginalErrors.Error
+const undoPolyfillErrorType = function ([name, OriginalAnyError]) {
+  setNonEnumProp(globalThis, name, OriginalAnyError)
 }
