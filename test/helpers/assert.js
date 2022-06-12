@@ -57,16 +57,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     configurable: true,
   })
 
-  assert.deepEqual(
-    Object.getOwnPropertyDescriptor(PonyfillAnyError, 'prototype'),
-    {
-      value: OriginalAnyError.prototype,
-      writable: false,
-      enumerable: false,
-      configurable: false,
-    },
-  )
-
   assert.notEqual(PonyfillAnyError.captureStackTrace, undefined)
 
   if (PonyfillAnyError.captureStackTrace !== undefined) {

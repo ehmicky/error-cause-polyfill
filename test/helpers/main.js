@@ -103,6 +103,18 @@ const defineParentTypeTests = function ({
     t.is(PonyfillAnyError.prototype, OriginalAnyError.prototype)
   })
 
+  test(`prototype has right descriptors | ${title}`, (t) => {
+    t.deepEqual(
+      Object.getOwnPropertyDescriptor(PonyfillAnyError, 'prototype'),
+      {
+        value: PonyfillAnyError.prototype,
+        writable: false,
+        enumerable: false,
+        configurable: false,
+      },
+    )
+  })
+
   test(`prototype.toString() is correct | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
   })
