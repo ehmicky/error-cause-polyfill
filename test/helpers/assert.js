@@ -1,4 +1,4 @@
-/* eslint-disable max-depth, max-lines */
+/* eslint-disable max-depth */
 import assert from 'assert/strict'
 
 import { getErrors, test, polyfill } from 'error-cause-polyfill'
@@ -87,40 +87,13 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     PonyfillAnyError.prepareStackTrace = undefined
   }
 
-  const ponyfillAnyError = new PonyfillAnyError(...errorArgs, { cause: 1 })
-
-  if (ponyfillAnyError.name === 'AggregateError') {
-    assert.deepEqual(
-      Object.getOwnPropertyDescriptor(ponyfillAnyError, 'errors'),
-      {
-        value: ponyfillAnyError.errors,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      },
-    )
-  }
-
-  const childError = new ChildError(...errorArgs, { cause: 1 })
-
-  if (childError.name === 'AggregateError') {
-    assert.deepEqual(Object.getOwnPropertyDescriptor(childError, 'errors'), {
-      value: childError.errors,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    })
-  }
-
-  const originalAnyError = new OriginalAnyError(...errorArgs)
-
-  if (originalAnyError.name === 'Error') {
+  if (OriginalAnyError.name === 'Error') {
     // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(originalAnyError)
+    console.log(new OriginalAnyError(...errorArgs, { cause: 1 }))
     // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(ponyfillAnyError)
+    console.log(new PonyfillAnyError(...errorArgs, { cause: 1 }))
     // eslint-disable-next-line no-console, no-restricted-globals
-    console.log(childError)
+    console.log(new ChildError(...errorArgs, { cause: 1 }))
   }
 }
 
@@ -135,4 +108,4 @@ assert.equal(!hasPolyfill(), testWithoutPolyfill)
 assert(test())
 undoPolyfill()
 assert(!hasPolyfill())
-/* eslint-enable max-depth, max-lines */
+/* eslint-enable max-depth */
