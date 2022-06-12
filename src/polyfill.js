@@ -6,6 +6,7 @@ import { hasSupport } from './support.js'
 // If another polyfill was applied on global Error types before `polyfill()`
 // was called, it will be kept.
 // Idempotent.
+// If `error.cause` is already supported, it is a noop.
 export const polyfill = function () {
   if (hasSupport()) {
     return noop
@@ -34,6 +35,10 @@ const polyfillErrorType = function ([name, PonyfillAnyError]) {
 // If another polyfill was applied on global Error types since `polyfill()`
 // was called, it will be undone too.
 // Idempotent.
+// If `polyfill()` was a noop, so is `undoPolyfill()`
+//  - This ensures this is purely functional
+//  - For example, this would prevent from reverting any other polyfills loaded
+//    afterwards
 const undoPolyfill = function (OriginalErrors) {
   if (globalThis.Error === OriginalErrors.Error) {
     return

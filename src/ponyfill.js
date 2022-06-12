@@ -4,6 +4,7 @@ import { hasSupport } from './support.js'
 import { ERROR_TYPES } from './types.js'
 
 // Retrieve all ponyfill error types.
+// If `error.cause` is already supported, this returns the global objects.
 // In order to make it work with any `Error` polyfills (e.g. `AggregateError`
 // or another `error.cause` polyfill):
 //  - `getErrors()` is computed on-demand, not on load

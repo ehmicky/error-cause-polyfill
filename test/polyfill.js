@@ -30,3 +30,13 @@ test.serial('polyfill() can be undone twice', (t) => {
   undoPolyfill()
   t.is(globalThis.Error, originalErrors.Error)
 })
+
+test.serial('polyfill() can be done twice', (t) => {
+  const undoPolyfill = polyfill()
+  const undoPolyfillTwo = polyfill()
+  t.is(globalThis.Error === originalErrors.Error, supportsCause)
+  undoPolyfillTwo()
+  t.is(globalThis.Error === originalErrors.Error, supportsCause)
+  undoPolyfill()
+  t.is(globalThis.Error, originalErrors.Error)
+})
