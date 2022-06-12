@@ -9,7 +9,7 @@ export const defineStackTests = function (title, error, OriginalAnyError) {
 
   test(`error.stack includes stack trace | ${title}`, (t) => {
     t.true(error.stack.includes('at '))
-    t.true(error.stack.includes('helpers/'))
+    t.true(error.stack.includes('helpers'))
   })
 
   test(`error.stack does not include this library's internal code | ${title}`, (t) => {
