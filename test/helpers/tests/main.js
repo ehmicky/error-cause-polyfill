@@ -173,6 +173,10 @@ const defineParBaseTypeTests = function (
     t.true(error.stack.includes(`${PonyfillAnyError.name}\n`))
     t.true(error.stack.includes('at '))
   })
+
+  test(`Error.prepareStackTrace() is same as original | ${title}`, (t) => {
+    t.is(PonyfillAnyError.prepareStackTrace, OriginalAnyError.prepareStackTrace)
+  })
 }
 
 // Tests run only on the parent Type, if not "Error"
@@ -345,7 +349,7 @@ const getPropertyDescriptor = function (object, propName) {
 
 const { hasOwnProperty: hasOwn } = Object.prototype
 
-// Tests run on the parent and child error instances, for AggregateError
+// Tests run on the parent and child error instances, if "AggregateError"
 const defineAggInstanceTests = function (title, error, errors) {
   test(`error.errors is correct | ${title}`, (t) => {
     t.deepEqual(error.errors, errors[0])

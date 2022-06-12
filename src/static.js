@@ -11,6 +11,10 @@
 //  - Setting them have no effect on `TypeError.*`, etc.
 //  - `captureStackTrace()` does work but it's because it is inherited, and it
 //    uses `Error` name, not `TypeError`, etc.
+// By default:
+//  - `PonyfillAnyError.captureStackTrace()` is present with `undefined` value
+//  - But `OriginalAnyError.captureStackTrace()` is absent
+//  - This difference is needed to set the proxy
 export const proxyStaticProperties = function (
   PonyfillAnyError,
   OriginalAnyError,
