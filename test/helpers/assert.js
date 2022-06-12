@@ -59,7 +59,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   })
 
   const originalAnyError = new OriginalAnyError(...errorArgs)
-  assert.equal(OriginalAnyError.prototype.toString(), OriginalAnyError.name)
   assert.equal(originalAnyError.toString(), `${OriginalAnyError.name}: test`)
 
   assert.deepEqual(Object.getOwnPropertyDescriptor(PonyfillAnyError, 'name'), {
@@ -86,7 +85,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       configurable: false,
     },
   )
-  assert.equal(PonyfillAnyError.prototype.toString(), OriginalAnyError.name)
 
   assert.notEqual(PonyfillAnyError.captureStackTrace, undefined)
 

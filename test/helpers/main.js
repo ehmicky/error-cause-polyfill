@@ -19,10 +19,14 @@ const defineTests = function ({ name, args, getTypes }) {
     OriginalAnyError,
     OriginalBaseError,
   } = getTypes(name)
+
+  defineParentTypeTests(name, PonyfillAnyError)
+
+  const typeKinds = getTypeKinds(PonyfillAnyError)
+  defineTypesTests({ typeKinds, name })
+
   const message = 'test'
   const argsA = [...args, message]
-  const typeKinds = getTypeKinds(PonyfillAnyError)
-
   const instanceKinds = getInstanceKinds(typeKinds, argsA)
   defineInstancesTests({
     instanceKinds,
@@ -82,6 +86,23 @@ const getInstanceKinds = function (
   ]
 }
 
+// Tests run only on the parent Type
+const defineParentTypeTests = function (title, PonyfillAnyError) {
+  test(`Is instance of original base Error | ${title}`, (t) => {
+    t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
+  })
+}
+
+// Tests run on the parent and child Types
+const defineTypesTests = function (typeKinds, name) {
+  Object.entries(typeKinds).forEach(([title, PonyfillAnyError]) => {
+    defineTypeTests(`${name} | ${title}`, PonyfillAnyError)
+  })
+}
+
+const defineTypeTests = function (title, PonyfillAnyError) {}
+
+// Tests run on the parent and child error instances
 const defineInstancesTests = function ({
   instanceKinds,
   name,
@@ -91,7 +112,7 @@ const defineInstancesTests = function ({
 }) {
   instanceKinds.forEach(({ title, PonyfillAnyError, error }) => {
     defineInstanceTests({
-      title: `| ${name} | ${title}`,
+      title: `${name} | ${title}`,
       error,
       PonyfillAnyError,
       PonyfillBaseError,
@@ -109,31 +130,31 @@ const defineInstanceTests = function ({
   OriginalAnyError,
   OriginalBaseError,
 }) {
-  test(`Is instance of original base Error ${title}`, (t) => {
+  test(`Is instance of original base Error | ${title}`, (t) => {
     t.true(error instanceof OriginalBaseError)
   })
 
-  test(`Is instance of ponyfill base Error ${title}`, (t) => {
+  test(`Is instance of ponyfill base Error | ${title}`, (t) => {
     t.true(error instanceof PonyfillBaseError)
   })
 
-  test(`Is instance of original Error ${title}`, (t) => {
+  test(`Is instance of original Error | ${title}`, (t) => {
     t.true(error instanceof OriginalAnyError)
   })
 
-  test(`Is instance of ponyfill Error ${title}`, (t) => {
+  test(`Is instance of ponyfill Error | ${title}`, (t) => {
     t.true(error instanceof PonyfillAnyError)
   })
 
-  test(`__proto__ is constructor's prototype ${title}`, (t) => {
+  test(`__proto__ is constructor's prototype | ${title}`, (t) => {
     t.is(Object.getPrototypeOf(error), PonyfillAnyError.prototype)
   })
 
-  test(`constructor is correct ${title}`, (t) => {
+  test(`constructor is correct | ${title}`, (t) => {
     t.is(error.constructor, PonyfillAnyError)
   })
 
-  test(`constructor has right descriptors ${title}`, (t) => {
+  test(`constructor has right descriptors | ${title}`, (t) => {
     t.deepEqual(getPropertyDescriptor(error, 'constructor'), {
       value: PonyfillAnyError,
       writable: true,
