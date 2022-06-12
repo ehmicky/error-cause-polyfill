@@ -1,11 +1,13 @@
 import test from 'ava'
 import { getErrors, hasSupport } from 'error-cause-polyfill'
-// eslint-disable-next-line n/file-extension-in-import
-import OtherPolyfillTypeError from 'error-cause/TypeError/implementation'
 
-import { getOriginalErrors } from './helpers/types.js'
+import {
+  setOtherPolyfill,
+  unsetOtherPolyfill,
+  OtherPolyfillTypeError,
+  originalErrors,
+} from './helpers/other_polyfill.js'
 
-const originalErrors = getOriginalErrors()
 const lacksCause = !hasSupport()
 
 test('getErrors() does not modify globals', (t) => {
@@ -41,23 +43,3 @@ test.serial('getErrors() before another polyfill', (t) => {
   unsetOtherPolyfill()
   t.is(globalThis.TypeError, originalErrors.TypeError)
 })
-
-const setOtherPolyfill = function () {
-  setGlobalTypeError(OtherPolyfillTypeError)
-}
-
-const unsetOtherPolyfill = function () {
-  setGlobalTypeError(originalErrors.TypeError)
-}
-
-// Use TypeError so we can polyfill it without impacting `hasSupport()`
-// return value.
-const setGlobalTypeError = function (value) {
-  // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(globalThis, 'TypeError', {
-    value,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
-}
