@@ -99,7 +99,7 @@ const defineParentTypeTests = function ({
   PonyfillAnyError,
   OriginalAnyError,
 }) {
-  test(`Is instance of original base Error | ${title}`, (t) => {
+  test(`prototype.toString() is correct | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
   })
 
