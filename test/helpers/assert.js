@@ -2,16 +2,14 @@
 import assert from 'assert/strict'
 import { types } from 'util'
 
-import {
-  OriginalErrors,
-  Errors,
-  test,
-  polyfill,
-  undoPolyfill,
-} from 'error-cause-polyfill'
+import { Errors, test, polyfill, undoPolyfill } from 'error-cause-polyfill'
+
+import { getOriginalErrors } from './types.js'
 
 const mainErrorArgs = ['test']
 const aggregateErrorArgs = [[], 'test']
+
+const OriginalErrors = getOriginalErrors()
 
 const ALL_ERRORS = [
   [OriginalErrors.Error, Errors.Error, mainErrorArgs],
