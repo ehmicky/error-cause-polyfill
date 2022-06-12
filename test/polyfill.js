@@ -6,11 +6,11 @@ import OtherPolyfillTypeError from 'error-cause/TypeError/implementation'
 import { getOriginalErrors } from './helpers/types.js'
 
 const originalErrors = getOriginalErrors()
-const supportsCause = hasSupport()
+const lacksCause = !hasSupport()
 
 test.serial('polyfill() patches globals unless already supported', (t) => {
   const undoPolyfill = polyfill()
-  t.is(globalThis.Error === originalErrors.Error, supportsCause)
+  t.is(globalThis.Error !== originalErrors.Error, lacksCause)
   undoPolyfill()
 })
 
@@ -36,9 +36,9 @@ test.serial('polyfill() can be undone twice', (t) => {
 test.serial('polyfill() can be done twice', (t) => {
   const undoPolyfill = polyfill()
   const undoPolyfillTwo = polyfill()
-  t.is(globalThis.Error === originalErrors.Error, supportsCause)
+  t.is(globalThis.Error !== originalErrors.Error, lacksCause)
   undoPolyfillTwo()
-  t.is(globalThis.Error === originalErrors.Error, supportsCause)
+  t.is(globalThis.Error !== originalErrors.Error, lacksCause)
   undoPolyfill()
   t.is(globalThis.Error, originalErrors.Error)
 })
@@ -51,7 +51,7 @@ test.serial('Can polyfill after another polyfill', (t) => {
   t.is(
     globalThis.TypeError !== OtherPolyfillTypeError &&
       Object.getPrototypeOf(globalThis.TypeError) === OtherPolyfillTypeError,
-    !supportsCause,
+    lacksCause,
   )
   undoPolyfill()
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
@@ -62,15 +62,15 @@ test.serial('Can polyfill after another polyfill', (t) => {
 test.serial('Can polyfill before another polyfill', (t) => {
   t.is(globalThis.TypeError, originalErrors.TypeError)
   const undoPolyfill = polyfill()
-  t.is(globalThis.TypeError === originalErrors.TypeError, supportsCause)
+  t.is(globalThis.TypeError !== originalErrors.TypeError, lacksCause)
   setOtherPolyfill()
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
   t.is(
-    Object.getPrototypeOf(globalThis.TypeError) === originalErrors.Error,
-    supportsCause,
+    Object.getPrototypeOf(globalThis.TypeError) !== originalErrors.Error,
+    lacksCause,
   )
   undoPolyfill()
-  t.is(globalThis.TypeError === OtherPolyfillTypeError, supportsCause)
+  t.is(globalThis.TypeError !== OtherPolyfillTypeError, lacksCause)
 })
 
 const setOtherPolyfill = function () {
