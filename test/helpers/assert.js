@@ -1,6 +1,6 @@
 import assert from 'assert/strict'
 
-import { test, polyfill } from 'error-cause-polyfill'
+import { hasSupport, polyfill } from 'error-cause-polyfill'
 
 import { getOriginalErrors } from './types.js'
 
@@ -10,10 +10,10 @@ const hasPolyfill = function () {
   return globalThis.Error !== OriginalErrors.Error
 }
 
-const testWithoutPolyfill = test()
+const testWithoutPolyfill = hasSupport()
 assert(!hasPolyfill())
 const undoPolyfill = polyfill()
 assert.equal(!hasPolyfill(), testWithoutPolyfill)
-assert(test())
+assert(hasSupport())
 undoPolyfill()
 assert(!hasPolyfill())

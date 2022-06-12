@@ -1,13 +1,13 @@
-import { test } from './check.js'
 import { getErrors } from './ponyfill.js'
 import { setNonEnumProp } from './set.js'
+import { hasSupport } from './support.js'
 
 // Monkey patches the global object, i.e. polyfills it.
 // If another polyfill was applied on global Error types before `polyfill()`
 // was called, it will be kept.
 // Idempotent.
 export const polyfill = function () {
-  if (test()) {
+  if (hasSupport()) {
     return noop
   }
 

@@ -1,6 +1,6 @@
-import { test } from './check.js'
 import { setNonEnumProp, setNonEnumReadonlyProp, setFrozenProp } from './set.js'
 import { proxyStaticProperties } from './static.js'
+import { hasSupport } from './support.js'
 import { ERROR_TYPES } from './types.js'
 
 // Retrieve all ponyfill error types.
@@ -45,7 +45,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
   const OriginalAnyError = globalThis[name]
   const OriginalBaseError = globalThis.Error
 
-  if (test()) {
+  if (hasSupport()) {
     return [name, OriginalAnyError]
   }
 
