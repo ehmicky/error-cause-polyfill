@@ -72,28 +72,24 @@ const getInstanceKinds = function (
   { PonyfillAnyError, ChildError, GrandChildError },
   args,
 ) {
-  return [
-    {
-      title: 'NewErrorType',
+  return {
+    NewErrorType: {
       PonyfillAnyError,
       error: new PonyfillAnyError(...args),
     },
-    {
-      title: 'BareErrorType',
+    BareErrorType: {
       PonyfillAnyError,
       error: PonyfillAnyError(...args),
     },
-    {
-      title: 'ChildError',
+    ChildError: {
       PonyfillAnyError: ChildError,
       error: new ChildError(...args),
     },
-    {
-      title: 'GrandChildError',
+    GrandChildError: {
       PonyfillAnyError: GrandChildError,
       error: new GrandChildError(...args),
     },
-  ]
+  }
 }
 
 // Tests run only on the parent Type
@@ -152,18 +148,20 @@ const defineInstancesTests = function ({
   message,
   cause,
 }) {
-  instanceKinds.forEach(({ title, PonyfillAnyError, error }) => {
-    defineInstanceTests({
-      title: `${name} | ${title}`,
-      error,
-      PonyfillAnyError,
-      PonyfillBaseError,
-      OriginalAnyError,
-      OriginalBaseError,
-      message,
-      cause,
-    })
-  })
+  Object.entries(instanceKinds).forEach(
+    ([title, { PonyfillAnyError, error }]) => {
+      defineInstanceTests({
+        title: `${name} | ${title}`,
+        error,
+        PonyfillAnyError,
+        PonyfillBaseError,
+        OriginalAnyError,
+        OriginalBaseError,
+        message,
+        cause,
+      })
+    },
+  )
 }
 
 // eslint-disable-next-line max-statements
