@@ -55,6 +55,16 @@ test.serial('Can polyfill after another polyfill', (t) => {
   t.is(globalThis.TypeError, originalErrors.TypeError)
 })
 
+test.serial('Can polyfill before another polyfill', (t) => {
+  t.is(globalThis.TypeError, originalErrors.TypeError)
+  const undoPolyfill = polyfill()
+  t.is(globalThis.TypeError === originalErrors.TypeError, supportsCause)
+  setOtherPolyfill()
+  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  undoPolyfill()
+  t.is(globalThis.TypeError === OtherPolyfillTypeError, supportsCause)
+})
+
 const setOtherPolyfill = function () {
   setGlobalTypeError(OtherPolyfillTypeError)
 }
