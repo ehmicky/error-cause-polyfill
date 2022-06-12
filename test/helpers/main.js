@@ -4,6 +4,7 @@ import { OriginalErrors, Errors } from 'error-cause-polyfill'
 
 import { ERROR_TYPES } from './types.js'
 
+// Run each test on each type of error
 export const defineAllTests = function (getTypes) {
   // eslint-disable-next-line fp/no-loops
   for (const { name, args } of ERROR_TYPES) {
@@ -13,13 +14,18 @@ export const defineAllTests = function (getTypes) {
 
 const defineTests = function ({ name, args, getTypes }) {
   const { ErrorType, OriginalAnyError } = getTypes(name)
-  const ChildError = getChildError(ErrorType)
-  const GrandChildError = getChildError(ChildError)
-  const ErrorTypes = { ErrorType, ChildError, GrandChildError }
+  const ErrorTypes = getErrorTypes(ErrorType)
   Object.entries(ErrorTypes).forEach(([ErrorTypeName, ErrorTypeA]) => {
     const title = `| ${name} | ${ErrorTypeName}`
     defineTestsSeries({ title, args, ErrorType: ErrorTypeA, OriginalAnyError })
   })
+}
+
+// Run each test on the ErrorType, but also a child and grand child of it
+const getErrorTypes = function (ErrorType) {
+  const ChildError = getChildError(ErrorType)
+  const GrandChildError = getChildError(ChildError)
+  return { ErrorType, ChildError, GrandChildError }
 }
 
 const getChildError = function (ParentError) {
