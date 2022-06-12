@@ -74,13 +74,13 @@ const defineMiscTypePrepTests = function ({
   OriginalAnyError,
   args,
 }) {
-  if (!('prepareStackTrace' in OriginalAnyError)) {
-    return
-  }
-
   test(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
     t.false('prepareStackTrace' in PonyfillAnyError)
   })
+
+  if (!('prepareStackTrace' in OriginalAnyError)) {
+    return
+  }
 
   test.serial(`MiscError.prepareStackTrace() is a noop | ${title}`, (t) => {
     const stack = 'testStack'

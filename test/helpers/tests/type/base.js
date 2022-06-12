@@ -22,13 +22,13 @@ const defineBaseTypeLimitTests = function ({
   OriginalAnyError,
   args,
 }) {
-  if (!('stackTraceLimit' in OriginalAnyError)) {
-    return
-  }
-
   test(`Error.stackTraceLimit is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
+
+  if (!('stackTraceLimit' in OriginalAnyError)) {
+    return
+  }
 
   test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
     const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
@@ -47,13 +47,13 @@ const defineBaseTypeCaptTests = function ({
   PonyfillAnyError,
   OriginalAnyError,
 }) {
-  if (!('captureStackTrace' in OriginalAnyError)) {
-    return
-  }
-
   test(`Error.captureStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
   })
+
+  if (!('captureStackTrace' in OriginalAnyError)) {
+    return
+  }
 
   test(`Error.captureStackTrace() is not enumerable | ${title}`, (t) => {
     t.false(isEnum.call(PonyfillAnyError, 'captureStackTrace'))
@@ -74,13 +74,13 @@ const defineBaseTypePrepTests = function ({
   OriginalAnyError,
   args,
 }) {
-  if (!('prepareStackTrace' in OriginalAnyError)) {
-    return
-  }
-
   test(`Error.prepareStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.prepareStackTrace, OriginalAnyError.prepareStackTrace)
   })
+
+  if (!('prepareStackTrace' in OriginalAnyError)) {
+    return
+  }
 
   test(`Error.prepareStackTrace() is not enumerable | ${title}`, (t) => {
     t.false(isEnum.call(PonyfillAnyError, 'prepareStackTrace'))
