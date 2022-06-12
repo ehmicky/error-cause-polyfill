@@ -209,6 +209,11 @@ const defineInstanceTests = function ({
     t.is(error.name, PonyfillAnyError.name)
   })
 
+  test(`error.name is inherited | ${title}`, (t) => {
+    t.false(hasOwn.call(error, 'name'))
+    t.true(hasOwn.call(Object.getPrototypeOf(error), 'name'))
+  })
+
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
   })
@@ -238,3 +243,5 @@ const getPropertyDescriptor = function (object, propName) {
     Object.getOwnPropertyDescriptor(Object.getPrototypeOf(object), propName)
   )
 }
+
+const { hasOwnProperty: hasOwn } = Object.prototype
