@@ -41,6 +41,7 @@ const defineTests = function ({ name, args, getTypes }) {
     PonyfillBaseError,
     OriginalAnyError,
     OriginalBaseError,
+    message,
   })
 }
 
@@ -146,6 +147,7 @@ const defineInstancesTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  message,
 }) {
   instanceKinds.forEach(({ title, PonyfillAnyError, error }) => {
     defineInstanceTests({
@@ -155,6 +157,7 @@ const defineInstancesTests = function ({
       PonyfillBaseError,
       OriginalAnyError,
       OriginalBaseError,
+      message,
     })
   })
 }
@@ -166,6 +169,7 @@ const defineInstanceTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  message,
 }) {
   test(`Is instance of original base Error | ${title}`, (t) => {
     t.true(error instanceof OriginalBaseError)
@@ -198,6 +202,10 @@ const defineInstanceTests = function ({
       enumerable: false,
       configurable: true,
     })
+  })
+
+  test(`error.message is correct | ${title}`, (t) => {
+    t.is(error.message, message)
   })
 
   test(`error.toString() returns name and message | ${title}`, (t) => {
