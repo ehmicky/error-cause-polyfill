@@ -5,7 +5,7 @@ const getOriginalErrors = function () {
 }
 
 const getOriginalAnyError = function ({ name }) {
-  return globalThis[name]
+  return [name, globalThis[name]]
 }
 
 export const ORIGINAL_ERRORS = getOriginalErrors()

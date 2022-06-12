@@ -40,7 +40,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
   const OriginalAnyError = ORIGINAL_ERRORS[name]
 
   if (test()) {
-    return OriginalAnyError
+    return [name, OriginalAnyError]
   }
 
   const PonyfillAnyError = function (...args) {
@@ -54,7 +54,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
   }
 
   fixType({ PonyfillAnyError, OriginalAnyError, shouldProxy, argsLength })
-  return PonyfillAnyError
+  return [name, PonyfillAnyError]
 }
 
 // `error.constructor` should be the function which created the class.
