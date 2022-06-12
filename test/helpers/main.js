@@ -162,6 +162,10 @@ const defineInstanceTests = function ({
       configurable: true,
     })
   })
+
+  test(`error.toString() returns name and message | ${title}`, (t) => {
+    t.is(error.toString(), `${PonyfillAnyError.name}: ${error.message}`)
+  })
 }
 
 // Return property descriptor that is own or is inherited from direct parent
