@@ -12,14 +12,14 @@ const hasAggregateError = function () {
 }
 
 export const ERROR_TYPES = [
-  { name: 'Error', args: [] },
-  { name: 'ReferenceError', args: [] },
-  { name: 'TypeError', args: [] },
-  { name: 'SyntaxError', args: [] },
-  { name: 'RangeError', args: [] },
-  { name: 'URIError', args: [] },
-  { name: 'EvalError', args: [] },
-  ...(hasAggregateError() ? [{ name: 'AggregateError', args: [[]] }] : []),
+  'Error',
+  'ReferenceError',
+  'TypeError',
+  'SyntaxError',
+  'RangeError',
+  'URIError',
+  'EvalError',
+  ...(hasAggregateError() ? ['AggregateError'] : []),
 ]
 
 // Retrieve original errors before polyfilling
@@ -27,6 +27,6 @@ export const getOriginalErrors = function () {
   return Object.fromEntries(ERROR_TYPES.map(getOriginalAnyError))
 }
 
-const getOriginalAnyError = function ({ name }) {
+const getOriginalAnyError = function (name) {
   return [name, globalThis[name]]
 }

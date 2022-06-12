@@ -9,12 +9,12 @@ import { ERROR_TYPES } from './types.js'
 // Run each test on each type of error
 export const defineAllTests = function (getTypes) {
   // eslint-disable-next-line fp/no-loops
-  for (const { name, args } of ERROR_TYPES) {
-    defineTests({ name, args, getTypes })
+  for (const name of ERROR_TYPES) {
+    defineTests({ name, getTypes })
   }
 }
 
-const defineTests = function ({ name, args, getTypes }) {
+const defineTests = function ({ name, getTypes }) {
   const {
     PonyfillAnyError,
     PonyfillBaseError,
@@ -22,9 +22,7 @@ const defineTests = function ({ name, args, getTypes }) {
     OriginalBaseError,
   } = getTypes(name)
 
-  const message = 'testMessage'
-  const cause = 'testCause'
-  const argsA = [...args, message, { cause }]
+  const { errors, message, cause, args } = getArgs(name)
 
   defineParentTypeTests({
     title: name,
@@ -35,17 +33,26 @@ const defineTests = function ({ name, args, getTypes }) {
   const typeKinds = getTypeKinds(PonyfillAnyError)
   defineTypesTests(typeKinds, name)
 
-  const instanceKinds = getInstanceKinds(typeKinds, argsA)
+  const instanceKinds = getInstanceKinds(typeKinds, args)
   defineInstancesTests({
     instanceKinds,
     name,
     PonyfillBaseError,
     OriginalAnyError,
     OriginalBaseError,
+    errors,
     message,
     cause,
   })
   defineChildInstanceTests(name, instanceKinds)
+}
+
+const getArgs = function (name) {
+  const errors = name === 'AggregateError' ? [['testErrors']] : []
+  const message = 'testMessage'
+  const cause = 'testCause'
+  const args = [...errors, message, { cause }]
+  return { errors, message, cause, args }
 }
 
 // Run each test on the ErrorType, but also a child and grand child of it.
@@ -162,6 +169,7 @@ const defineInstancesTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  errors,
   message,
   cause,
 }) {
@@ -174,6 +182,7 @@ const defineInstancesTests = function ({
         PonyfillBaseError,
         OriginalAnyError,
         OriginalBaseError,
+        errors,
         message,
         cause,
       })
@@ -189,6 +198,7 @@ const defineInstanceTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  errors,
   message,
   cause,
 }) {
@@ -291,7 +301,7 @@ const defineInstanceTests = function ({
   })
 
   if (PonyfillAnyError.name === 'AggregateError') {
-    defineAggInstanceTests(title, error)
+    defineAggInstanceTests(title, error, errors)
   }
 }
 
@@ -306,9 +316,9 @@ const getPropertyDescriptor = function (object, propName) {
 const { hasOwnProperty: hasOwn } = Object.prototype
 
 // Tests run on the parent and child error instances, for AggregateError
-const defineAggInstanceTests = function (title, error) {
+const defineAggInstanceTests = function (title, error, errors) {
   test(`error.errors is correct | ${title}`, (t) => {
-    t.true(Array.isArray(error.errors))
+    t.deepEqual(error.errors, errors[0])
   })
 }
 
