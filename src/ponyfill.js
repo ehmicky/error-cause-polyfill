@@ -25,14 +25,12 @@ import { ERROR_TYPES } from './types.js'
 //  - Error properties have some internal slots|properties which cannot be
 //    copied, and which are used for example by Node.js
 //    `util.types.isNativeError()`
-// We purposely get arguments `(message, ...args)` to ensure
-// `PonyfillAnyError.length` is `1` like `OriginalAnyError.length`
 // We do not use `Function.bind()` but lexical scope instead because binding
 // changes how `new ...` works.
 // Node 16.9.0 - 16.10.0 had a v8 bug where `Error.prototype.cause` was defined
 //  - This means an `undefined` `cause` was present on `new Error()`
 //  - We do not fix this since it was only present in those 2 versions and was
-//   fixed quickly
+//    fixed quickly
 // List of differences with native behavior:
 //  - medium:
 //     - `error.__proto__.constructor` is set as `error.constructor` instead
@@ -45,8 +43,6 @@ import { ERROR_TYPES } from './types.js'
 // Issues with error-cause:
 //  - Package size is too big
 //  - Does not support child error types
-//  - TODO: find from the automated tests which ones `error-cause` does not
-//    handle correctly
 export const getErrors = function () {
   return Object.fromEntries(ERROR_TYPES.map(getPonyfillAnyError))
 }

@@ -27,6 +27,17 @@ export const defineAnyTypeTests = function ({
     t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
   })
 
+  test.serial(
+    `Original Error static properties are inherited | ${title}`,
+    (t) => {
+      // eslint-disable-next-line fp/no-mutation, no-param-reassign
+      OriginalAnyError.prop = true
+      t.true(PonyfillAnyError.prop)
+      // eslint-disable-next-line fp/no-delete, no-param-reassign
+      delete OriginalAnyError.prop
+    },
+  )
+
   test(`Constructor name is kept | ${title}`, (t) => {
     t.is(PonyfillAnyError.name, OriginalAnyError.name)
   })
