@@ -215,7 +215,7 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
 
-  test.serial.skip(`Error.stackTraceLimit works | ${title}`, (t) => {
+  test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
     const oldStackTraceLimit = Object.getOwnPropertyDescriptor(
       PonyfillAnyError,
       'stackTraceLimit',
