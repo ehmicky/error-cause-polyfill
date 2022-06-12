@@ -23,6 +23,7 @@ const defineTests = function ({ name, getTypes }) {
     PonyfillBaseError,
     OriginalAnyError,
     OriginalBaseError,
+    supportsCause,
   } = getTypes(name)
 
   const { errors, message, cause, args } = getArgs(name)
@@ -41,6 +42,7 @@ const defineTests = function ({ name, getTypes }) {
     PonyfillBaseError,
     OriginalAnyError,
     OriginalBaseError,
+    supportsCause,
     errors,
     message,
     cause,
@@ -277,6 +279,7 @@ const defineInstancesTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  supportsCause,
   errors,
   message,
   cause,
@@ -290,6 +293,7 @@ const defineInstancesTests = function ({
         PonyfillBaseError,
         OriginalAnyError,
         OriginalBaseError,
+        supportsCause,
         errors,
         message,
         cause,
@@ -306,6 +310,7 @@ const defineInstanceTests = function ({
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
+  supportsCause,
   errors,
   message,
   cause,
@@ -384,16 +389,21 @@ const defineInstanceTests = function ({
   })
 
   test(`error.cause is patched | ${title}`, (t) => {
-    t.is(error.cause, cause)
+    t.is(error.cause === cause, supportsCause)
   })
 
   test(`error.cause has right descriptors | ${title}`, (t) => {
-    t.deepEqual(getPropertyDescriptor(error, 'cause'), {
-      value: error.cause,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    })
+    t.deepEqual(
+      getPropertyDescriptor(error, 'cause'),
+      supportsCause
+        ? {
+            value: error.cause,
+            writable: true,
+            enumerable: false,
+            configurable: true,
+          }
+        : undefined,
+    )
   })
 
   test(`error.toString() returns name and message | ${title}`, (t) => {

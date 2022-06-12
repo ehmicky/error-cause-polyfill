@@ -17,4 +17,5 @@ defineAllTests((name) => ({
   PonyfillBaseError: globalThis.Error,
   OriginalAnyError: OriginalErrors[name],
   OriginalBaseError: OriginalErrors.Error,
+  supportsCause: true,
 }))
