@@ -21,25 +21,48 @@ const defineTests = function ({ name, args, getTypes }) {
   } = getTypes(name)
   const message = 'test'
   const argsA = [...args, message]
-  const kinds = getKinds(PonyfillAnyError, argsA)
-  kinds.forEach(({ title, PonyfillAnyError: PonyfillAnyErrorA, error }) => {
-    const titleA = `| ${name} | ${title}`
-    defineTestsSeries({
-      title: titleA,
-      error,
-      PonyfillAnyError: PonyfillAnyErrorA,
-      PonyfillBaseError,
-      OriginalAnyError,
-      OriginalBaseError,
-    })
-  })
+  const typeKinds = getTypeKinds(PonyfillAnyError)
+  const instanceKinds = getInstanceKinds(typeKinds, argsA)
+  instanceKinds.forEach(
+    ({ title, PonyfillAnyError: PonyfillAnyErrorA, error }) => {
+      const titleA = `| ${name} | ${title}`
+      defineInstanceTests({
+        title: titleA,
+        error,
+        PonyfillAnyError: PonyfillAnyErrorA,
+        PonyfillBaseError,
+        OriginalAnyError,
+        OriginalBaseError,
+      })
+    },
+  )
 }
 
 // Run each test on the ErrorType, but also a child and grand child of it.
-// Also run with and without `new` for the base type.
-const getKinds = function (PonyfillAnyError, args) {
+const getTypeKinds = function (PonyfillAnyError) {
   const ChildError = getChildError(PonyfillAnyError)
   const GrandChildError = getChildError(ChildError)
+  return { PonyfillAnyError, ChildError, GrandChildError }
+}
+
+const getChildError = function (ParentError) {
+  // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
+  class ChildError extends ParentError {}
+  // eslint-disable-next-line fp/no-mutating-methods
+  Object.defineProperty(ChildError.prototype, 'name', {
+    value: ChildError.name,
+    writable: true,
+    enumerable: false,
+    configurable: true,
+  })
+  return ChildError
+}
+
+// Run with and without `new` for the base type.
+const getInstanceKinds = function (
+  { PonyfillAnyError, ChildError, GrandChildError },
+  args,
+) {
   return [
     {
       title: 'NewErrorType',
@@ -64,20 +87,7 @@ const getKinds = function (PonyfillAnyError, args) {
   ]
 }
 
-const getChildError = function (ParentError) {
-  // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
-  class ChildError extends ParentError {}
-  // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(ChildError.prototype, 'name', {
-    value: ChildError.name,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
-  return ChildError
-}
-
-const defineTestsSeries = function ({
+const defineInstanceTests = function ({
   title,
   error,
   PonyfillAnyError,
