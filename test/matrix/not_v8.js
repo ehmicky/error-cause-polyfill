@@ -16,7 +16,6 @@ defineAllTests(
   }),
   {
     PonyfillBaseError: globalThis.Error,
-    OriginalBaseError: globalThis.Error,
     supportsCause,
   },
 )
