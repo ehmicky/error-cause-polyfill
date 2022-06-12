@@ -10,21 +10,30 @@ const { hasOwnProperty: hasOwn, propertyIsEnumerable: isEnum } =
   Object.prototype
 
 // Run each test on each type of error
-export const defineAllTests = function (getTypes) {
+export const defineAllTests = function (
+  getTypes,
+  { PonyfillBaseError, OriginalBaseError, supportsCause },
+) {
   // eslint-disable-next-line fp/no-loops
   for (const name of ERROR_TYPES) {
-    defineTests({ name, getTypes })
+    defineTests({
+      name,
+      getTypes,
+      PonyfillBaseError,
+      OriginalBaseError,
+      supportsCause,
+    })
   }
 }
 
-const defineTests = function ({ name, getTypes }) {
-  const {
-    PonyfillAnyError,
-    PonyfillBaseError,
-    OriginalAnyError,
-    OriginalBaseError,
-    supportsCause,
-  } = getTypes(name)
+const defineTests = function ({
+  name,
+  getTypes,
+  PonyfillBaseError,
+  OriginalBaseError,
+  supportsCause,
+}) {
+  const { PonyfillAnyError, OriginalAnyError } = getTypes(name)
 
   const { errors, message, cause, args } = getArgs(name)
 

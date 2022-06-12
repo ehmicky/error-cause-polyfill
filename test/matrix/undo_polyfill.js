@@ -8,10 +8,14 @@ const supportsCause = hasSupport()
 const OriginalErrors = getOriginalErrors()
 const undoPolyfill = polyfill()
 undoPolyfill()
-defineAllTests((name) => ({
-  PonyfillAnyError: globalThis[name],
-  PonyfillBaseError: globalThis.Error,
-  OriginalAnyError: OriginalErrors[name],
-  OriginalBaseError: OriginalErrors.Error,
-  supportsCause,
-}))
+defineAllTests(
+  (name) => ({
+    PonyfillAnyError: globalThis[name],
+    OriginalAnyError: OriginalErrors[name],
+  }),
+  {
+    PonyfillBaseError: globalThis.Error,
+    OriginalBaseError: OriginalErrors.Error,
+    supportsCause,
+  },
+)

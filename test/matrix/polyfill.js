@@ -12,10 +12,14 @@ import { getOriginalErrors } from '../helpers/types.js'
 //    helpers
 const OriginalErrors = getOriginalErrors()
 polyfill()
-defineAllTests((name) => ({
-  PonyfillAnyError: globalThis[name],
-  PonyfillBaseError: globalThis.Error,
-  OriginalAnyError: OriginalErrors[name],
-  OriginalBaseError: OriginalErrors.Error,
-  supportsCause: true,
-}))
+defineAllTests(
+  (name) => ({
+    PonyfillAnyError: globalThis[name],
+    OriginalAnyError: OriginalErrors[name],
+  }),
+  {
+    PonyfillBaseError: globalThis.Error,
+    OriginalBaseError: OriginalErrors.Error,
+    supportsCause: true,
+  },
+)
