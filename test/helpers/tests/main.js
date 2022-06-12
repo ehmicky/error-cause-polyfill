@@ -184,6 +184,12 @@ const defineParMiscTypeTests = function (title, PonyfillAnyError) {
   test(`Error.captureStackTrace() is inherited | ${title}`, (t) => {
     t.false(hasOwnProperty.call(PonyfillAnyError, 'captureStackTrace'))
   })
+
+  test(`Error.captureStackTrace() does not include type name | ${title}`, (t) => {
+    const error = {}
+    PonyfillAnyError.captureStackTrace(error)
+    t.false(error.stack.includes(`${PonyfillAnyError.name}\n`))
+  })
 }
 
 // Tests run on the parent and child error instances
