@@ -49,9 +49,9 @@ test.serial('Can polyfill after another polyfill', (t) => {
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
   const undoPolyfill = polyfill()
   t.is(
-    globalThis.TypeError === OtherPolyfillTypeError &&
-      Object.getPrototypeOf(globalThis.TypeError) !== OtherPolyfillTypeError,
-    supportsCause,
+    globalThis.TypeError !== OtherPolyfillTypeError &&
+      Object.getPrototypeOf(globalThis.TypeError) === OtherPolyfillTypeError,
+    !supportsCause,
   )
   undoPolyfill()
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
