@@ -215,21 +215,14 @@ const defineParBaseTypeTests = function ({
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
 
-  test.serial.skip(`Error.stackTraceLimit works | ${title}`, (t) => {
-    const oldStackTraceLimit = Object.getOwnPropertyDescriptor(
-      PonyfillAnyError,
-      'stackTraceLimit',
-    )
+  test.serial(`Error.stackTraceLimit works | ${title}`, (t) => {
+    const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
     // eslint-disable-next-line fp/no-mutation, no-param-reassign
     PonyfillAnyError.stackTraceLimit = 0
     const error = new PonyfillAnyError(...args)
     t.is(error.stack, `${error.name}: ${error.message}`)
-    // eslint-disable-next-line fp/no-mutating-methods
-    Object.defineProperty(
-      PonyfillAnyError,
-      'stackTraceLimit',
-      oldStackTraceLimit,
-    )
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.stackTraceLimit = oldStackTraceLimit
   })
 }
 
