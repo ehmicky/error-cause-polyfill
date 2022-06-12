@@ -103,15 +103,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   // eslint-disable-next-line fp/no-loops
   for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
     assert.deepEqual(
-      Object.getOwnPropertyDescriptor(ponyfillAnyError, 'stack'),
-      {
-        value: ponyfillAnyError.stack,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      },
-    )
-    assert.deepEqual(
       Object.getOwnPropertyDescriptor(ponyfillAnyError, 'cause'),
       {
         value: 1,
@@ -141,12 +132,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
-  assert.deepEqual(Object.getOwnPropertyDescriptor(childError, 'stack'), {
-    value: childError.stack,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
   assert.deepEqual(Object.getOwnPropertyDescriptor(childError, 'cause'), {
     value: 1,
     writable: true,

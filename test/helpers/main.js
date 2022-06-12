@@ -236,6 +236,15 @@ const defineInstanceTests = function ({
     })
   })
 
+  test(`error.stack has right descriptors | ${title}`, (t) => {
+    t.deepEqual(getPropertyDescriptor(error, 'stack'), {
+      value: error.stack,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    })
+  })
+
   test(`error.toString() returns name and message | ${title}`, (t) => {
     t.is(error.toString(), `${PonyfillAnyError.name}: ${error.message}`)
   })
