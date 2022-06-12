@@ -52,4 +52,16 @@ export const defineAnyTypeTests = function ({
       configurable: true,
     })
   })
+
+  test(`Global Error has right descriptors | ${title}`, (t) => {
+    t.deepEqual(
+      Object.getOwnPropertyDescriptor(globalThis, PonyfillAnyError.name),
+      {
+        value: globalThis[PonyfillAnyError.name],
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      },
+    )
+  })
 }
