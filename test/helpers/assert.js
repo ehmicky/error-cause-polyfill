@@ -1,6 +1,6 @@
-/* eslint-disable max-depth, complexity, max-lines */
+/* eslint-disable max-depth, max-lines */
 import assert from 'assert/strict'
-import { types } from 'util'
+import { types, isDeepStrictEqual } from 'util'
 
 import {
   OriginalError,
@@ -26,13 +26,7 @@ import {
 
 const checkDescriptor = function (object, propName, descriptor) {
   const descriptorA = Object.getOwnPropertyDescriptor(object, propName)
-  return (
-    descriptorA !== undefined &&
-    descriptorA.writable === descriptor.writable &&
-    descriptorA.enumerable === descriptor.enumerable &&
-    descriptorA.configurable === descriptor.configurable &&
-    descriptorA.value === descriptor.value
-  )
+  return descriptorA !== undefined && isDeepStrictEqual(descriptor, descriptorA)
 }
 
 const mainErrorArgs = ['test']
@@ -319,4 +313,4 @@ assert.notEqual(hasPolyfill(), testWithoutPolyfill)
 assert(test())
 unpolyfill()
 assert(!hasPolyfill())
-/* eslint-enable max-depth, complexity, max-lines */
+/* eslint-enable max-depth, max-lines */
