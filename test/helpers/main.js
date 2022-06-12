@@ -162,6 +162,7 @@ const defineInstancesTests = function ({
   })
 }
 
+// eslint-disable-next-line max-statements
 const defineInstanceTests = function ({
   title,
   error,
@@ -197,7 +198,7 @@ const defineInstanceTests = function ({
 
   test(`constructor has right descriptors | ${title}`, (t) => {
     t.deepEqual(getPropertyDescriptor(error, 'constructor'), {
-      value: PonyfillAnyError,
+      value: error.constructor,
       writable: true,
       enumerable: false,
       configurable: true,
@@ -206,6 +207,15 @@ const defineInstanceTests = function ({
 
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
+  })
+
+  test(`error.message has right descriptors | ${title}`, (t) => {
+    t.deepEqual(getPropertyDescriptor(error, 'message'), {
+      value: error.message,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    })
   })
 
   test(`error.toString() returns name and message | ${title}`, (t) => {
