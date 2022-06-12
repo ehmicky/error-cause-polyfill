@@ -24,10 +24,6 @@ import {
   unpolyfill,
 } from 'error-cause-polyfill'
 
-const checkDescriptor = function (descriptorA, descriptor) {
-  return descriptorA !== undefined && isDeepStrictEqual(descriptor, descriptorA)
-}
-
 const mainErrorArgs = ['test']
 const aggregateErrorArgs = [[], 'test']
 
@@ -82,7 +78,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   )
   assert.equal(originalAnyError.constructor, OriginalAnyError)
   assert(
-    checkDescriptor(
+    isDeepStrictEqual(
       Object.getOwnPropertyDescriptor(originalAnyError, 'constructor') ||
         Object.getOwnPropertyDescriptor(
           Object.getPrototypeOf(originalAnyError),
@@ -100,15 +96,18 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(originalAnyError.toString(), `${OriginalAnyError.name}: test`)
 
   assert(
-    checkDescriptor(Object.getOwnPropertyDescriptor(PonyfillAnyError, 'name'), {
-      value: OriginalAnyError.name,
-      writable: false,
-      enumerable: false,
-      configurable: true,
-    }),
+    isDeepStrictEqual(
+      Object.getOwnPropertyDescriptor(PonyfillAnyError, 'name'),
+      {
+        value: OriginalAnyError.name,
+        writable: false,
+        enumerable: false,
+        configurable: true,
+      },
+    ),
   )
   assert(
-    checkDescriptor(
+    isDeepStrictEqual(
       Object.getOwnPropertyDescriptor(PonyfillAnyError, 'length'),
       {
         value: errorArgs.length,
@@ -119,7 +118,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     ),
   )
   assert(
-    checkDescriptor(
+    isDeepStrictEqual(
       Object.getOwnPropertyDescriptor(PonyfillAnyError, 'prototype'),
       {
         value: OriginalAnyError.prototype,
@@ -168,7 +167,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
     assert(types.isNativeError(ponyfillAnyError))
     assert(
-      checkDescriptor(
+      isDeepStrictEqual(
         Object.getOwnPropertyDescriptor(ponyfillAnyError, 'message'),
         {
           value: 'test',
@@ -179,7 +178,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       ),
     )
     assert(
-      checkDescriptor(
+      isDeepStrictEqual(
         Object.getOwnPropertyDescriptor(
           Object.getPrototypeOf(ponyfillAnyError),
           'name',
@@ -193,7 +192,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       ),
     )
     assert(
-      checkDescriptor(
+      isDeepStrictEqual(
         Object.getOwnPropertyDescriptor(ponyfillAnyError, 'stack'),
         {
           value: ponyfillAnyError.stack,
@@ -204,7 +203,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       ),
     )
     assert(
-      checkDescriptor(
+      isDeepStrictEqual(
         Object.getOwnPropertyDescriptor(ponyfillAnyError, 'cause'),
         {
           value: 1,
@@ -218,7 +217,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     if (ponyfillAnyError.name === 'AggregateError') {
       assert(Array.isArray(ponyfillAnyError.errors))
       assert(
-        checkDescriptor(
+        isDeepStrictEqual(
           Object.getOwnPropertyDescriptor(ponyfillAnyError, 'errors'),
           {
             value: ponyfillAnyError.errors,
@@ -247,7 +246,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
   assert(
-    checkDescriptor(Object.getOwnPropertyDescriptor(childError, 'message'), {
+    isDeepStrictEqual(Object.getOwnPropertyDescriptor(childError, 'message'), {
       value: 'test',
       writable: true,
       enumerable: false,
@@ -255,7 +254,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     }),
   )
   assert(
-    checkDescriptor(
+    isDeepStrictEqual(
       Object.getOwnPropertyDescriptor(
         Object.getPrototypeOf(childError),
         'name',
@@ -269,7 +268,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     ),
   )
   assert(
-    checkDescriptor(Object.getOwnPropertyDescriptor(childError, 'stack'), {
+    isDeepStrictEqual(Object.getOwnPropertyDescriptor(childError, 'stack'), {
       value: childError.stack,
       writable: true,
       enumerable: false,
@@ -277,7 +276,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     }),
   )
   assert(
-    checkDescriptor(Object.getOwnPropertyDescriptor(childError, 'cause'), {
+    isDeepStrictEqual(Object.getOwnPropertyDescriptor(childError, 'cause'), {
       value: 1,
       writable: true,
       enumerable: false,
@@ -288,7 +287,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   if (childError.name === 'AggregateError') {
     assert(Array.isArray(childError.errors))
     assert(
-      checkDescriptor(Object.getOwnPropertyDescriptor(childError, 'errors'), {
+      isDeepStrictEqual(Object.getOwnPropertyDescriptor(childError, 'errors'), {
         value: childError.errors,
         writable: true,
         enumerable: false,
@@ -308,7 +307,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(Object.getPrototypeOf(childError), ChildError.prototype)
   assert.equal(childError.constructor, ChildError)
   assert(
-    checkDescriptor(
+    isDeepStrictEqual(
       Object.getOwnPropertyDescriptor(childError, 'constructor') ||
         Object.getOwnPropertyDescriptor(
           Object.getPrototypeOf(childError),
