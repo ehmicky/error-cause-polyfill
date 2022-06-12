@@ -1,6 +1,6 @@
 import { polyfill } from 'error-cause-polyfill'
 
-import { defineAllTests } from '../helpers/main.js'
+import { defineAllTests } from '../helpers/tests/main.js'
 import { getOriginalErrors } from '../helpers/types.js'
 
 // Run tests with the Error types after polyfill() then undoPolyfill()

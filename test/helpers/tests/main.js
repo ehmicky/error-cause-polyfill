@@ -4,7 +4,7 @@ import { types } from 'util'
 
 import test from 'ava'
 
-import { ERROR_TYPES } from './types.js'
+import { ERROR_TYPES } from '../types.js'
 
 // Run each test on each type of error
 export const defineAllTests = function (getTypes) {
