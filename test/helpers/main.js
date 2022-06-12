@@ -99,6 +99,10 @@ const defineParentTypeTests = function ({
   PonyfillAnyError,
   OriginalAnyError,
 }) {
+  test(`prototype is same as original prototype | ${title}`, (t) => {
+    t.is(PonyfillAnyError.prototype, OriginalAnyError.prototype)
+  })
+
   test(`prototype.toString() is correct | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype.toString(), PonyfillAnyError.name)
   })
