@@ -60,10 +60,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   })
 
   const originalAnyError = new OriginalAnyError(...errorArgs)
-  assert.equal(
-    Object.getPrototypeOf(originalAnyError),
-    OriginalAnyError.prototype,
-  )
   assert.equal(originalAnyError.constructor, OriginalAnyError)
   assert.deepEqual(
     Object.getOwnPropertyDescriptor(originalAnyError, 'constructor') ||
@@ -201,10 +197,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       Object.prototype.toString.call(ponyfillAnyError),
       '[object Error]',
     )
-    assert.equal(
-      Object.getPrototypeOf(ponyfillAnyError),
-      PonyfillAnyError.prototype,
-    )
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
@@ -250,7 +242,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(Object.prototype.toString.call(childError), '[object Error]')
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
-  assert.equal(Object.getPrototypeOf(childError), ChildError.prototype)
   assert.equal(childError.constructor, ChildError)
   assert.deepEqual(
     Object.getOwnPropertyDescriptor(childError, 'constructor') ||

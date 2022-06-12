@@ -14,18 +14,42 @@ export const defineAllTests = function (getTypes) {
 
 const defineTests = function ({ name, args, getTypes }) {
   const { ErrorType, OriginalAnyError } = getTypes(name)
-  const ErrorTypes = getErrorTypes(ErrorType)
-  Object.entries(ErrorTypes).forEach(([ErrorTypeName, ErrorTypeA]) => {
-    const title = `| ${name} | ${ErrorTypeName}`
-    defineTestsSeries({ title, args, ErrorType: ErrorTypeA, OriginalAnyError })
+  const message = 'test'
+  const argsA = [...args, message]
+  const kinds = getKinds(ErrorType, argsA)
+  kinds.forEach(({ title, AnyError, error }) => {
+    const titleA = `| ${name} | ${title}`
+    defineTestsSeries({ title: titleA, error, AnyError, OriginalAnyError })
   })
 }
 
-// Run each test on the ErrorType, but also a child and grand child of it
-const getErrorTypes = function (ErrorType) {
+// Run each test on the ErrorType, but also a child and grand child of it.
+// Also run with and without `new` for the base type.
+const getKinds = function (ErrorType, args) {
   const ChildError = getChildError(ErrorType)
   const GrandChildError = getChildError(ChildError)
-  return { ErrorType, ChildError, GrandChildError }
+  return [
+    {
+      title: 'NewErrorType',
+      AnyError: ErrorType,
+      error: new ErrorType(...args),
+    },
+    {
+      title: 'BareErrorType',
+      AnyError: ErrorType,
+      error: ErrorType(...args),
+    },
+    {
+      title: 'ChildError',
+      AnyError: ChildError,
+      error: new ChildError(...args),
+    },
+    {
+      title: 'GrandChildError',
+      AnyError: GrandChildError,
+      error: new GrandChildError(...args),
+    },
+  ]
 }
 
 const getChildError = function (ParentError) {
@@ -43,13 +67,10 @@ const getChildError = function (ParentError) {
 
 const defineTestsSeries = function ({
   title,
-  args,
-  ErrorType,
+  error,
+  AnyError,
   OriginalAnyError,
 }) {
-  const message = 'test'
-  const error = new ErrorType(...args, message)
-
   test(`Is instance of original base Error ${title}`, (t) => {
     t.true(error instanceof OriginalErrors.Error)
   })
@@ -63,6 +84,10 @@ const defineTestsSeries = function ({
   })
 
   test(`Is instance of polyfill Error ${title}`, (t) => {
-    t.true(error instanceof ErrorType)
+    t.true(error instanceof AnyError)
+  })
+
+  test(`__proto__ is constructor's prototype ${title}`, (t) => {
+    t.is(Object.getPrototypeOf(error), AnyError.prototype)
   })
 }
