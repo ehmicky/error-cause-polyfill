@@ -1,7 +1,7 @@
 import { polyfill } from 'error-cause-polyfill'
 
-import { defineAllTests } from './helpers/main.js'
-import { getOriginalErrors } from './helpers/types.js'
+import { defineAllTests } from '../helpers/main.js'
+import { getOriginalErrors } from '../helpers/types.js'
 
 // Run tests with the Error types after polyfill()
 // We use different test files which import a common test helper because:
