@@ -45,6 +45,7 @@ const defineTests = function ({ name, args, getTypes }) {
     message,
     cause,
   })
+  defineChildInstanceTests(name, instanceKinds)
 }
 
 // Run each test on the ErrorType, but also a child and grand child of it.
@@ -283,3 +284,16 @@ const getPropertyDescriptor = function (object, propName) {
 }
 
 const { hasOwnProperty: hasOwn } = Object.prototype
+
+// Tests run on the child error instances
+const defineChildInstanceTests = function (
+  title,
+  {
+    ChildError: { PonyfillAnyError: ChildError },
+    GrandChildError: { error: grandChildError },
+  },
+) {
+  test(`Grand child error is instanceof child error | ${title}`, (t) => {
+    t.true(grandChildError instanceof ChildError)
+  })
+}

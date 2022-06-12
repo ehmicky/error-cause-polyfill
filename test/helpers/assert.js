@@ -124,9 +124,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     })
   }
 
-  assert(childError instanceof TestError)
-  assert(childError instanceof ChildError)
-
   const originalAnyError = new OriginalAnyError(...errorArgs)
 
   if (originalAnyError.name === 'Error') {
