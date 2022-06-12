@@ -1,8 +1,6 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
 
-import { defineAggInstanceTests } from './aggregate.js'
-
 const { hasOwnProperty: hasOwn } = Object.prototype
 
 // Tests run on the parent and child error instances, related to core error
@@ -16,6 +14,15 @@ export const defineInstancePropsTests = function ({
   message,
   cause,
 }) {
+  defineNameTests(title, error, PonyfillAnyError)
+  defineMessageTests(title, error, message)
+  defineStackTests(title, error)
+  defineCauseTests({ title, error, supportsCause, cause })
+  defineErrorsTests({ title, error, errors, PonyfillAnyError })
+}
+
+// Tests run on the parent and child error instances, related to `error.name`
+const defineNameTests = function (title, error, PonyfillAnyError) {
   test(`error.name is correct | ${title}`, (t) => {
     t.is(error.name, PonyfillAnyError.name)
   })
@@ -36,7 +43,10 @@ export const defineInstancePropsTests = function ({
       },
     )
   })
+}
 
+// Tests run on the parent and child error instances, related to `error.message`
+const defineMessageTests = function (title, error, message) {
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
   })
@@ -49,7 +59,10 @@ export const defineInstancePropsTests = function ({
       configurable: true,
     })
   })
+}
 
+// Tests run on the parent and child error instances, related to `error.stack`
+const defineStackTests = function (title, error) {
   test(`error.stack is correct | ${title}`, (t) => {
     t.true(error.stack.includes(error.toString()))
     t.true(error.stack.includes('at '))
@@ -64,7 +77,10 @@ export const defineInstancePropsTests = function ({
       configurable: true,
     })
   })
+}
 
+// Tests run on the parent and child error instances, related to `error.cause`
+const defineCauseTests = function ({ title, error, supportsCause, cause }) {
   test(`error.cause is patched | ${title}`, (t) => {
     t.is(error.cause === cause, supportsCause)
   })
@@ -82,8 +98,29 @@ export const defineInstancePropsTests = function ({
         : undefined,
     )
   })
+}
 
-  if (PonyfillAnyError.name === 'AggregateError') {
-    defineAggInstanceTests(title, error, errors)
+// Tests run on the parent and child error instances, related to `error.errors`
+const defineErrorsTests = function ({
+  title,
+  error,
+  errors,
+  PonyfillAnyError,
+}) {
+  if (PonyfillAnyError.name !== 'AggregateError') {
+    return
   }
+
+  test(`error.errors is correct | ${title}`, (t) => {
+    t.deepEqual(error.errors, errors[0])
+  })
+
+  test(`error.errors has right descriptors | ${title}`, (t) => {
+    t.deepEqual(Object.getOwnPropertyDescriptor(error, 'errors'), {
+      value: error.errors,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    })
+  })
 }
