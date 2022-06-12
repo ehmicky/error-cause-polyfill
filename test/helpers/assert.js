@@ -90,7 +90,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   const ponyfillAnyError = new PonyfillAnyError(...errorArgs, { cause: 1 })
 
   if (ponyfillAnyError.name === 'AggregateError') {
-    assert(Array.isArray(ponyfillAnyError.errors))
     assert.deepEqual(
       Object.getOwnPropertyDescriptor(ponyfillAnyError, 'errors'),
       {
@@ -105,7 +104,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   const childError = new ChildError(...errorArgs, { cause: 1 })
 
   if (childError.name === 'AggregateError') {
-    assert(Array.isArray(childError.errors))
     assert.deepEqual(Object.getOwnPropertyDescriptor(childError, 'errors'), {
       value: childError.errors,
       writable: true,
