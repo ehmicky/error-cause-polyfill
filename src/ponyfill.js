@@ -148,4 +148,4 @@ const fixType = function ({
   proxyStaticProperties(PonyfillAnyError, OriginalAnyError, shouldProxy)
 }
 
-export const PONYFILL_ERRORS = getPonyfillErrors()
+export const Errors = getPonyfillErrors()

@@ -1,10 +1,8 @@
-import { OriginalErrors } from 'error-cause-polyfill'
-// eslint-disable-next-line import/no-namespace
-import * as allExports from 'error-cause-polyfill'
+import { Errors, OriginalErrors } from 'error-cause-polyfill'
 
 import { defineAllTests } from './helpers/main.js'
 
 defineAllTests((name) => ({
-  ErrorType: allExports[name],
+  ErrorType: Errors[name],
   OriginalAnyError: OriginalErrors[name],
 }))

@@ -1,6 +1,6 @@
 import { test } from './check.js'
 import { OriginalErrors } from './original.js'
-import { PONYFILL_ERRORS } from './ponyfill.js'
+import { Errors } from './ponyfill.js'
 import { setNonEnumProp } from './set.js'
 import { ERROR_TYPES } from './types.js'
 
@@ -14,7 +14,7 @@ export const polyfill = function () {
 }
 
 const polyfillErrorType = function ({ name }) {
-  setNonEnumProp(globalThis, name, PONYFILL_ERRORS[name])
+  setNonEnumProp(globalThis, name, Errors[name])
 }
 
 // Undo `polyfill()`
