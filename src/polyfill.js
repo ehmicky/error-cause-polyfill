@@ -18,15 +18,15 @@ const polyfillErrorType = function ({ name }) {
 }
 
 // Undo `polyfill()`
-export const unpolyfill = function () {
+export const undoPolyfill = function () {
   if (!hasPolyfill()) {
     return
   }
 
-  ERROR_TYPES.forEach(unpolyfillErrorType)
+  ERROR_TYPES.forEach(undoPolyfillErrorType)
 }
 
-const unpolyfillErrorType = function ({ name }) {
+const undoPolyfillErrorType = function ({ name }) {
   setNonEnumProp(globalThis, name, ORIGINAL_ERRORS[name])
 }
 

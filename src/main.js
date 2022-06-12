@@ -1,7 +1,7 @@
 import { ORIGINAL_ERRORS } from './original.js'
 import { PONYFILL_ERRORS } from './ponyfill.js'
 
-export { polyfill, unpolyfill } from './polyfill.js'
+export { polyfill, undoPolyfill } from './polyfill.js'
 export { test } from './check.js'
 
 export const OriginalError = ORIGINAL_ERRORS.Error

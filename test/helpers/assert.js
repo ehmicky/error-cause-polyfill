@@ -21,7 +21,7 @@ import {
   AggregateError as PonyfillAggregateError,
   test,
   polyfill,
-  unpolyfill,
+  undoPolyfill,
 } from 'error-cause-polyfill'
 
 const mainErrorArgs = ['test']
@@ -305,6 +305,6 @@ assert(!hasPolyfill())
 polyfill()
 assert.notEqual(hasPolyfill(), testWithoutPolyfill)
 assert(test())
-unpolyfill()
+undoPolyfill()
 assert(!hasPolyfill())
 /* eslint-enable max-depth, max-lines */
