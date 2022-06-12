@@ -83,26 +83,18 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(originalAnyError.constructor, OriginalAnyError)
   assert(
     checkDescriptor(
-      Object.getOwnPropertyDescriptor(originalAnyError, 'constructor'),
+      Object.getOwnPropertyDescriptor(originalAnyError, 'constructor') ||
+        Object.getOwnPropertyDescriptor(
+          Object.getPrototypeOf(originalAnyError),
+          'constructor',
+        ),
       {
         value: OriginalAnyError,
         writable: true,
         enumerable: false,
         configurable: true,
       },
-    ) ||
-      checkDescriptor(
-        Object.getOwnPropertyDescriptor(
-          Object.getPrototypeOf(originalAnyError),
-          'constructor',
-        ),
-        {
-          value: OriginalAnyError,
-          writable: true,
-          enumerable: false,
-          configurable: true,
-        },
-      ),
+    ),
   )
   assert.equal(OriginalAnyError.prototype.toString(), OriginalAnyError.name)
   assert.equal(originalAnyError.toString(), `${OriginalAnyError.name}: test`)
@@ -317,26 +309,18 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert.equal(childError.constructor, ChildError)
   assert(
     checkDescriptor(
-      Object.getOwnPropertyDescriptor(childError, 'constructor'),
+      Object.getOwnPropertyDescriptor(childError, 'constructor') ||
+        Object.getOwnPropertyDescriptor(
+          Object.getPrototypeOf(childError),
+          'constructor',
+        ),
       {
         value: ChildError,
         writable: true,
         enumerable: false,
         configurable: true,
       },
-    ) ||
-      checkDescriptor(
-        Object.getOwnPropertyDescriptor(
-          Object.getPrototypeOf(childError),
-          'constructor',
-        ),
-        {
-          value: ChildError,
-          writable: true,
-          enumerable: false,
-          configurable: true,
-        },
-      ),
+    ),
   )
 
   if (originalAnyError.name === 'Error') {
