@@ -1,6 +1,5 @@
 /* eslint-disable max-depth, complexity, max-lines */
-// eslint-disable-next-line no-restricted-imports, n/no-restricted-import
-import assert from 'assert'
+import assert from 'assert/strict'
 import { types } from 'util'
 
 import {
@@ -84,8 +83,11 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert(originalAnyError instanceof PonyfillError)
   assert(originalAnyError instanceof OriginalAnyError)
   assert(originalAnyError instanceof PonyfillAnyError)
-  assert(Object.getPrototypeOf(originalAnyError) === OriginalAnyError.prototype)
-  assert(originalAnyError.constructor === OriginalAnyError)
+  assert.equal(
+    Object.getPrototypeOf(originalAnyError),
+    OriginalAnyError.prototype,
+  )
+  assert.equal(originalAnyError.constructor, OriginalAnyError)
   assert(
     checkDescriptor(originalAnyError, 'constructor', {
       value: OriginalAnyError,
@@ -129,7 +131,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   )
   assert.equal(PonyfillAnyError.prototype.toString(), OriginalAnyError.name)
 
-  assert(PonyfillAnyError.captureStackTrace !== undefined)
+  assert.notEqual(PonyfillAnyError.captureStackTrace, undefined)
 
   if (PonyfillAnyError.captureStackTrace !== undefined) {
     const obj = {}
@@ -138,7 +140,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   }
 
   if (OriginalAnyError.name === 'Error') {
-    assert(PonyfillAnyError.stackTraceLimit !== undefined)
+    assert.notEqual(PonyfillAnyError.stackTraceLimit, undefined)
 
     if (PonyfillAnyError.stackTraceLimit !== undefined) {
       const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
@@ -217,8 +219,9 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     assert(ponyfillAnyError instanceof PonyfillError)
     assert(ponyfillAnyError instanceof OriginalAnyError)
     assert(ponyfillAnyError instanceof PonyfillAnyError)
-    assert(
-      Object.getPrototypeOf(ponyfillAnyError) === PonyfillAnyError.prototype,
+    assert.equal(
+      Object.getPrototypeOf(ponyfillAnyError),
+      PonyfillAnyError.prototype,
     )
   }
 
@@ -274,8 +277,8 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert(childError instanceof PonyfillAnyError)
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
-  assert(Object.getPrototypeOf(childError) === ChildError.prototype)
-  assert(childError.constructor === ChildError)
+  assert.equal(Object.getPrototypeOf(childError), ChildError.prototype)
+  assert.equal(childError.constructor, ChildError)
   assert(
     checkDescriptor(childError, 'constructor', {
       value: ChildError,
@@ -308,7 +311,7 @@ const hasPolyfill = function () {
 const testWithoutPolyfill = test()
 assert(!hasPolyfill())
 polyfill()
-assert(hasPolyfill() !== testWithoutPolyfill)
+assert.notEqual(hasPolyfill(), testWithoutPolyfill)
 assert(test())
 unpolyfill()
 assert(!hasPolyfill())
