@@ -14,6 +14,6 @@ export const defineTypeTests = function ({
   if (PonyfillAnyError.name === 'Error') {
     defineBaseTypeTests({ title, PonyfillAnyError, OriginalAnyError, args })
   } else {
-    defineMiscTypeTests({ title, PonyfillAnyError, args })
+    defineMiscTypeTests({ title, PonyfillAnyError, OriginalAnyError, args })
   }
 }

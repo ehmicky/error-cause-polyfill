@@ -15,8 +15,6 @@
 //  - `PonyfillAnyError.captureStackTrace()` is present with `undefined` value
 //  - But `OriginalAnyError.captureStackTrace()` is absent
 //  - This difference is needed to set the proxy
-// By using a Proxy, `delete` now removes the proxy descriptor, not the
-// underlying descriptor.
 export const proxyStaticProperties = function (
   PonyfillAnyError,
   OriginalAnyError,
