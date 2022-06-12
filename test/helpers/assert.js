@@ -60,10 +60,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   })
 
   const originalAnyError = new OriginalAnyError(...errorArgs)
-  assert(originalAnyError instanceof OriginalErrors.Error)
-  assert(originalAnyError instanceof Errors.Error)
-  assert(originalAnyError instanceof OriginalAnyError)
-  assert(originalAnyError instanceof PonyfillAnyError)
   assert.equal(
     Object.getPrototypeOf(originalAnyError),
     OriginalAnyError.prototype,
@@ -205,10 +201,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       Object.prototype.toString.call(ponyfillAnyError),
       '[object Error]',
     )
-    assert(ponyfillAnyError instanceof OriginalErrors.Error)
-    assert(ponyfillAnyError instanceof Errors.Error)
-    assert(ponyfillAnyError instanceof OriginalAnyError)
-    assert(ponyfillAnyError instanceof PonyfillAnyError)
     assert.equal(
       Object.getPrototypeOf(ponyfillAnyError),
       PonyfillAnyError.prototype,
@@ -256,10 +248,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   assert.equal(childError.toString(), `${childError.name}: test`)
   assert.equal(Object.prototype.toString.call(childError), '[object Error]')
-  assert(childError instanceof OriginalErrors.Error)
-  assert(childError instanceof Errors.Error)
-  assert(childError instanceof OriginalAnyError)
-  assert(childError instanceof PonyfillAnyError)
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
   assert.equal(Object.getPrototypeOf(childError), ChildError.prototype)
