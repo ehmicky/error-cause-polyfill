@@ -23,7 +23,7 @@ const defineTests = function ({ name, args, getTypes }) {
   defineParentTypeTests(name, PonyfillAnyError)
 
   const typeKinds = getTypeKinds(PonyfillAnyError)
-  defineTypesTests({ typeKinds, name })
+  defineTypesTests(typeKinds, name)
 
   const message = 'test'
   const argsA = [...args, message]
