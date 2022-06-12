@@ -6,13 +6,21 @@
 
 Polyfill `error.cause`.
 
-Work in progress!
-
-# Example
+[`error.cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause)
+is a recent JavaScript feature to wrap errors.
 
 ```js
-
+try {
+  doSomething()
+} catch (cause) {
+  throw new Error('message', { cause })
+}
 ```
+
+Unfortunately, it is
+[not supported](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause#browser_compatibility)
+in Node <16.9.0, Opera nor Safari <15. This library adds support for it in those
+environments.
 
 # Install
 
@@ -27,6 +35,76 @@ not `require()`.
 # API
 
 ## polyfill()
+
+_Return value_: `() => void`
+
+Modifies the global error types (`Error`, `TypeError`, etc.) so they support
+`error.cause`. If `error.cause` is already supported, this is a noop.
+
+<!-- eslint-disable import/no-unassigned-import -->
+
+```js
+import 'error-cause-polyfill/auto'
+
+try {
+  doSomething()
+} catch (cause) {
+  throw new Error('message', { cause })
+}
+```
+
+Or alternatively:
+
+```js
+import { polyfill } from 'error-cause-polyfill'
+
+polyfill()
+
+try {
+  doSomething()
+} catch (cause) {
+  throw new Error('message', { cause })
+}
+```
+
+This returns a function to undo polyfilling.
+
+```js
+import { polyfill } from 'error-cause-polyfill'
+
+const undoPolyfill = polyfill()
+undoPolyfill()
+```
+
+## getErrors()
+
+_Return value_: `object`
+
+This returns an object with each error type (`Error`, `TypeError`, etc.) but
+with `error.cause` support. If `error.cause` is already supported, this returns
+the global error types as is.
+
+Unlike [`polyfill()`](#polyfill), this does not modify the global error types.
+
+<!-- eslint-disable no-shadow -->
+
+```js
+import { getErrors } from 'error-cause-polyfill'
+
+const Errors = getErrors()
+
+try {
+  doSomething()
+} catch (cause) {
+  throw new Errors.Error('message', { cause })
+}
+```
+
+## hasSupport()
+
+_Return value_: `boolean`
+
+Returns whether the global error types currently support `error.cause`.
 
 # Support
 
