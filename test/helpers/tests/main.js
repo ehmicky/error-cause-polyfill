@@ -24,11 +24,7 @@ const defineTests = function ({ name, getTypes }) {
 
   const { errors, message, cause, args } = getArgs(name)
 
-  defineParentTypeTests({
-    title: name,
-    PonyfillAnyError,
-    OriginalAnyError,
-  })
+  defineParentTypeTests({ title: name, PonyfillAnyError, OriginalAnyError })
 
   const instanceKinds = getInstanceKinds(PonyfillAnyError, args)
   defineInstancesTests({
