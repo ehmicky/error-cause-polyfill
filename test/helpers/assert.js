@@ -1,31 +1,67 @@
+/* eslint-disable max-depth, complexity, max-lines */
+// eslint-disable-next-line no-restricted-imports, n/no-restricted-import
 import assert from 'assert'
 import { types } from 'util'
 
-import test from 'ava'
+import {
+  OriginalError,
+  OriginalReferenceError,
+  OriginalTypeError,
+  OriginalSyntaxError,
+  OriginalRangeError,
+  OriginalURIError,
+  OriginalEvalError,
+  OriginalAggregateError,
+  Error as PonyfillError,
+  ReferenceError as PonyfillReferenceError,
+  TypeError as PonyfillTypeError,
+  SyntaxError as PonyfillSyntaxError,
+  RangeError as PonyfillRangeError,
+  URIError as PonyfillURIError,
+  EvalError as PonyfillEvalError,
+  AggregateError as PonyfillAggregateError,
+  test,
+  polyfill,
+  unpolyfill,
+} from 'error-cause-polyfill'
 
-const errorArgs = ['test']
+const checkDescriptor = function (object, propName, descriptor) {
+  const descriptorA = Object.getOwnPropertyDescriptor(object, propName)
+  return (
+    descriptorA !== undefined &&
+    descriptorA.writable === descriptor.writable &&
+    descriptorA.enumerable === descriptor.enumerable &&
+    descriptorA.configurable === descriptor.configurable &&
+    (!('value' in descriptor) || descriptorA.value === descriptor.value)
+  )
+}
+
+const mainErrorArgs = ['test']
 const aggregateErrorArgs = [[], 'test']
 
 const ALL_ERRORS = [
-  [OriginalError, PonyfillError, errorArgs],
-  [OriginalReferenceError, PonyfillReferenceError, errorArgs],
-  [OriginalTypeError, PonyfillTypeError, errorArgs],
-  [OriginalSyntaxError, PonyfillSyntaxError, errorArgs],
-  [OriginalRangeError, PonyfillRangeError, errorArgs],
-  [OriginalURIError, PonyfillURIError, errorArgs],
-  [OriginalEvalError, PonyfillEvalError, errorArgs],
-  ...(hasAggregateError()
-    ? [[OriginalAggregateError, PonyfillAggregateError, aggregateErrorArgs]]
-    : []),
+  [OriginalError, PonyfillError, mainErrorArgs],
+  [OriginalReferenceError, PonyfillReferenceError, mainErrorArgs],
+  [OriginalTypeError, PonyfillTypeError, mainErrorArgs],
+  [OriginalSyntaxError, PonyfillSyntaxError, mainErrorArgs],
+  [OriginalRangeError, PonyfillRangeError, mainErrorArgs],
+  [OriginalURIError, PonyfillURIError, mainErrorArgs],
+  [OriginalEvalError, PonyfillEvalError, mainErrorArgs],
+  ...(AggregateError === undefined
+    ? []
+    : [[OriginalAggregateError, PonyfillAggregateError, aggregateErrorArgs]]),
 ]
 
+// eslint-disable-next-line fp/no-loops
 for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   // eslint-disable-next-line fp/no-class
   class TestError extends PonyfillAnyError {
+    // eslint-disable-next-line no-useless-constructor, unicorn/custom-error-definition
     constructor(...args) {
       super(...args)
     }
   }
+  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(TestError.prototype, 'name', {
     value: TestError.name,
     writable: true,
@@ -33,12 +69,9 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     configurable: true,
   })
 
-  class ChildError extends TestError {
-    constructor() {
-      super()
-      this.name = 'ChildError'
-    }
-  }
+  // eslint-disable-next-line fp/no-class, unicorn/custom-error-definition
+  class ChildError extends TestError {}
+  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(ChildError.prototype, 'name', {
     value: ChildError.name,
     writable: true,
@@ -46,23 +79,12 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     configurable: true,
   })
 
-  const checkDescriptor = function (object, propName, descriptor) {
-    const descriptorA = Object.getOwnPropertyDescriptor(object, propName)
-    return (
-      descriptorA !== undefined &&
-      descriptorA.writable === descriptor.writable &&
-      descriptorA.enumerable === descriptor.enumerable &&
-      descriptorA.configurable === descriptor.configurable &&
-      (!('value' in descriptor) || descriptorA.value === descriptor.value)
-    )
-  }
-
   const originalAnyError = new OriginalAnyError(...errorArgs)
   assert(originalAnyError instanceof OriginalError)
   assert(originalAnyError instanceof PonyfillError)
   assert(originalAnyError instanceof OriginalAnyError)
   assert(originalAnyError instanceof PonyfillAnyError)
-  assert(originalAnyError.__proto__ === OriginalAnyError.prototype)
+  assert(Object.getPrototypeOf(originalAnyError) === OriginalAnyError.prototype)
   assert(originalAnyError.constructor === OriginalAnyError)
   assert(
     checkDescriptor(originalAnyError, 'constructor', {
@@ -71,7 +93,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       enumerable: false,
       configurable: true,
     }) ||
-      checkDescriptor(originalAnyError.__proto__, 'constructor', {
+      checkDescriptor(Object.getPrototypeOf(originalAnyError), 'constructor', {
         value: OriginalAnyError,
         writable: true,
         enumerable: false,
@@ -120,22 +142,27 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
     if (PonyfillAnyError.stackTraceLimit !== undefined) {
       const oldStackTraceLimit = PonyfillAnyError.stackTraceLimit
+      // eslint-disable-next-line fp/no-mutation
       PonyfillAnyError.stackTraceLimit = 0
       assert.equal(
         new PonyfillAnyError('').stack,
         PonyfillAnyError.prototype.name,
       )
+      // eslint-disable-next-line fp/no-mutation
       PonyfillAnyError.stackTraceLimit = oldStackTraceLimit
     }
 
-    PonyfillAnyError.prepareStackTrace = () => 'mystack'
-    assert.equal(new PonyfillAnyError('').stack, 'mystack')
+    // eslint-disable-next-line fp/no-mutation
+    PonyfillAnyError.prepareStackTrace = () => 'stack'
+    assert.equal(new PonyfillAnyError('').stack, 'stack')
+    // eslint-disable-next-line fp/no-mutation
     PonyfillAnyError.prepareStackTrace = undefined
   }
 
   const ponyfillAnyErrorOne = new PonyfillAnyError(...errorArgs, { cause: 1 })
   const ponyfillAnyErrorTwo = PonyfillAnyError(...errorArgs, { cause: 1 })
 
+  // eslint-disable-next-line fp/no-loops
   for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
     assert(types.isNativeError(ponyfillAnyError))
     assert(
@@ -147,7 +174,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       }),
     )
     assert(
-      checkDescriptor(ponyfillAnyError.__proto__, 'name', {
+      checkDescriptor(Object.getPrototypeOf(ponyfillAnyError), 'name', {
         value: PonyfillAnyError.name,
         writable: true,
         enumerable: false,
@@ -190,7 +217,9 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     assert(ponyfillAnyError instanceof PonyfillError)
     assert(ponyfillAnyError instanceof OriginalAnyError)
     assert(ponyfillAnyError instanceof PonyfillAnyError)
-    assert(ponyfillAnyError.__proto__ === PonyfillAnyError.prototype)
+    assert(
+      Object.getPrototypeOf(ponyfillAnyError) === PonyfillAnyError.prototype,
+    )
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
@@ -203,7 +232,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
     }),
   )
   assert(
-    checkDescriptor(childError.__proto__, 'name', {
+    checkDescriptor(Object.getPrototypeOf(childError), 'name', {
       value: ChildError.name,
       writable: true,
       enumerable: false,
@@ -245,7 +274,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   assert(childError instanceof PonyfillAnyError)
   assert(childError instanceof TestError)
   assert(childError instanceof ChildError)
-  assert(childError.__proto__ === ChildError.prototype)
+  assert(Object.getPrototypeOf(childError) === ChildError.prototype)
   assert(childError.constructor === ChildError)
   assert(
     checkDescriptor(childError, 'constructor', {
@@ -254,7 +283,7 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
       enumerable: false,
       configurable: true,
     }) ||
-      checkDescriptor(childError.__proto__, 'constructor', {
+      checkDescriptor(Object.getPrototypeOf(childError), 'constructor', {
         value: ChildError,
         writable: true,
         enumerable: false,
@@ -263,10 +292,17 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   )
 
   if (originalAnyError.name === 'Error') {
+    // eslint-disable-next-line no-console, no-restricted-globals
     console.log(originalAnyError)
+    // eslint-disable-next-line no-console, no-restricted-globals
     console.log(ponyfillAnyErrorOne)
+    // eslint-disable-next-line no-console, no-restricted-globals
     console.log(childError)
   }
+}
+
+const hasPolyfill = function () {
+  return globalThis.Error !== OriginalError
 }
 
 const testWithoutPolyfill = test()
@@ -276,3 +312,4 @@ assert(hasPolyfill() !== testWithoutPolyfill)
 assert(test())
 unpolyfill()
 assert(!hasPolyfill())
+/* eslint-enable max-depth, complexity, max-lines */

@@ -19,10 +19,7 @@ export const ERROR_TYPES = [
   { name: 'RangeError', shouldProxy: false, argsLength: 1 },
   { name: 'URIError', shouldProxy: false, argsLength: 1 },
   { name: 'EvalError', shouldProxy: false, argsLength: 1 },
-  {
-    name: 'AggregateError',
-    shouldProxy: false,
-    argsLength: 2,
-    condition: hasAggregateError,
-  },
+  ...(hasAggregateError()
+    ? [{ name: 'AggregateError', shouldProxy: false, argsLength: 2 }]
+    : []),
 ]

@@ -1,23 +1,8 @@
-import {
-  OriginalError,
-  OriginalReferenceError,
-  OriginalTypeError,
-  OriginalSyntaxError,
-  OriginalRangeError,
-  OriginalURIError,
-  OriginalEvalError,
-  OriginalAggregateError,
-} from './original.js'
-import {
-  PonyfillError,
-  PonyfillReferenceError,
-  PonyfillTypeError,
-  PonyfillSyntaxError,
-  PonyfillRangeError,
-  PonyfillURIError,
-  PonyfillEvalError,
-  PonyfillAggregateError,
-} from './ponyfill.js'
+import { test } from './check.js'
+import { ORIGINAL_ERRORS } from './original.js'
+import { PONYFILL_ERRORS } from './ponyfill.js'
+import { setNonEnumProp } from './set.js'
+import { ERROR_TYPES } from './types.js'
 
 // Monkey patches the global object, i.e. polyfills it.
 export const polyfill = function () {
@@ -25,17 +10,11 @@ export const polyfill = function () {
     return
   }
 
-  setGlobalErrorType('Error', PonyfillError)
-  setGlobalErrorType('ReferenceError', PonyfillReferenceError)
-  setGlobalErrorType('TypeError', PonyfillTypeError)
-  setGlobalErrorType('SyntaxError', PonyfillSyntaxError)
-  setGlobalErrorType('RangeError', PonyfillRangeError)
-  setGlobalErrorType('URIError', PonyfillURIError)
-  setGlobalErrorType('EvalError', PonyfillEvalError)
+  ERROR_TYPES.forEach(polyfillErrorType)
+}
 
-  if (PonyfillAggregateError !== undefined) {
-    setGlobalErrorType('AggregateError', PonyfillAggregateError)
-  }
+const polyfillErrorType = function ({ name }) {
+  setNonEnumProp(globalThis, name, PONYFILL_ERRORS[name])
 }
 
 // Undo `polyfill()`
@@ -44,30 +23,19 @@ export const unpolyfill = function () {
     return
   }
 
-  setGlobalErrorType('Error', OriginalError)
-  setGlobalErrorType('ReferenceError', OriginalReferenceError)
-  setGlobalErrorType('TypeError', OriginalTypeError)
-  setGlobalErrorType('SyntaxError', OriginalSyntaxError)
-  setGlobalErrorType('RangeError', OriginalRangeError)
-  setGlobalErrorType('URIError', OriginalURIError)
-  setGlobalErrorType('EvalError', OriginalEvalError)
-
-  if (OriginalAggregateError !== undefined) {
-    setGlobalErrorType('AggregateError', OriginalAggregateError)
-  }
+  ERROR_TYPES.forEach(unpolyfillErrorType)
 }
 
-const setGlobalErrorType = function (propName, value) {
-  // eslint-disable-next-line fp/no-mutating-methods
-  Object.defineProperty(globalThis, propName, {
-    value,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
+const unpolyfillErrorType = function ({ name }) {
+  setNonEnumProp(globalThis, name, ORIGINAL_ERRORS[name])
 }
 
-// Handle case where another polyfill is used
+// Check whether this polyfill has already been used.
+// If another `Error` polyfill is applied since this library was loaded,
+// `ORIGINAL_ERRORS` will miss it
+//   - i.e. applying this polyfill would remove the other polyfill
+//   - Therefore, this becomes a noop
+// TODO: improve this so it is not a noop
 const hasPolyfill = function () {
-  return globalThis.Error !== OriginalError
+  return globalThis.Error !== ORIGINAL_ERRORS.Error
 }
