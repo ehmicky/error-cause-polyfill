@@ -65,6 +65,10 @@ test.serial('Can polyfill before another polyfill', (t) => {
   t.is(globalThis.TypeError === originalErrors.TypeError, supportsCause)
   setOtherPolyfill()
   t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(
+    Object.getPrototypeOf(globalThis.TypeError) === originalErrors.Error,
+    supportsCause,
+  )
   undoPolyfill()
   t.is(globalThis.TypeError === OtherPolyfillTypeError, supportsCause)
 })
