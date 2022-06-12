@@ -60,12 +60,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   const originalAnyError = new OriginalAnyError(...errorArgs)
 
-  assert.deepEqual(Object.getOwnPropertyDescriptor(PonyfillAnyError, 'name'), {
-    value: OriginalAnyError.name,
-    writable: false,
-    enumerable: false,
-    configurable: true,
-  })
   assert.deepEqual(
     Object.getOwnPropertyDescriptor(PonyfillAnyError, 'length'),
     {
