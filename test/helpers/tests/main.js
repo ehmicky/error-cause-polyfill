@@ -6,6 +6,9 @@ import test from 'ava'
 
 import { ERROR_TYPES } from '../types.js'
 
+const { hasOwnProperty: hasOwn, propertyIsEnumerable: isEnum } =
+  Object.prototype
+
 // Run each test on each type of error
 export const defineAllTests = function (getTypes) {
   // eslint-disable-next-line fp/no-loops
@@ -24,7 +27,12 @@ const defineTests = function ({ name, getTypes }) {
 
   const { errors, message, cause, args } = getArgs(name)
 
-  defineParentTypeTests({ title: name, PonyfillAnyError, OriginalAnyError })
+  defineParentTypeTests({
+    title: name,
+    PonyfillAnyError,
+    OriginalAnyError,
+    args,
+  })
 
   const instanceKinds = getInstanceKinds(PonyfillAnyError, args)
   defineInstancesTests({
@@ -91,6 +99,7 @@ const defineParentTypeTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
+  args,
 }) {
   test(`prototype is same as original prototype | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype, OriginalAnyError.prototype)
@@ -139,18 +148,19 @@ const defineParentTypeTests = function ({
   })
 
   if (PonyfillAnyError.name === 'Error') {
-    defineParBaseTypeTests(title, PonyfillAnyError, OriginalAnyError)
+    defineParBaseTypeTests({ title, PonyfillAnyError, OriginalAnyError, args })
   } else {
-    defineParMiscTypeTests(title, PonyfillAnyError)
+    defineParMiscTypeTests({ title, PonyfillAnyError, args })
   }
 }
 
 // Tests run only on the parent Type, if "Error"
-const defineParBaseTypeTests = function (
+const defineParBaseTypeTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
-) {
+  args,
+}) {
   test(`Error.captureStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
   })
@@ -177,22 +187,48 @@ const defineParBaseTypeTests = function (
   test(`Error.prepareStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.prepareStackTrace, OriginalAnyError.prepareStackTrace)
   })
+
+  test(`Error.prepareStackTrace() is not enumerable | ${title}`, (t) => {
+    t.false(isEnum.call(PonyfillAnyError, 'prepareStackTrace'))
+  })
+
+  test.serial(`Error.prepareStackTrace() works | ${title}`, (t) => {
+    const stack = 'testStack'
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.prepareStackTrace = () => stack
+    t.is(new PonyfillAnyError(...args).stack, stack)
+    // eslint-disable-next-line fp/no-delete, no-param-reassign
+    delete PonyfillAnyError.prepareStackTrace
+  })
 }
 
 // Tests run only on the parent Type, if not "Error"
-const defineParMiscTypeTests = function (title, PonyfillAnyError) {
-  test(`Error.captureStackTrace() is present | ${title}`, (t) => {
+const defineParMiscTypeTests = function ({ title, PonyfillAnyError, args }) {
+  test(`MiscError.captureStackTrace() is present | ${title}`, (t) => {
     t.true('captureStackTrace' in PonyfillAnyError)
   })
 
-  test(`Error.captureStackTrace() is inherited | ${title}`, (t) => {
+  test(`MiscError.captureStackTrace() is inherited | ${title}`, (t) => {
     t.false(hasOwnProperty.call(PonyfillAnyError, 'captureStackTrace'))
   })
 
-  test(`Error.captureStackTrace() does not include type name | ${title}`, (t) => {
+  test(`MiscError.captureStackTrace() does not include type name | ${title}`, (t) => {
     const error = {}
     PonyfillAnyError.captureStackTrace(error)
     t.false(error.stack.includes(`${PonyfillAnyError.name}\n`))
+  })
+
+  test(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
+    t.false('prepareStackTrace' in PonyfillAnyError)
+  })
+
+  test.serial(`MiscError.prepareStackTrace() is a noop | ${title}`, (t) => {
+    const stack = 'testStack'
+    // eslint-disable-next-line fp/no-mutation, no-param-reassign
+    PonyfillAnyError.prepareStackTrace = () => stack
+    t.not(new PonyfillAnyError(...args).stack, stack)
+    // eslint-disable-next-line fp/no-delete, no-param-reassign
+    delete PonyfillAnyError.prepareStackTrace
   })
 }
 
@@ -346,8 +382,6 @@ const getPropertyDescriptor = function (object, propName) {
     Object.getOwnPropertyDescriptor(Object.getPrototypeOf(object), propName)
   )
 }
-
-const { hasOwnProperty: hasOwn } = Object.prototype
 
 // Tests run on the parent and child error instances, if "AggregateError"
 const defineAggInstanceTests = function (title, error, errors) {

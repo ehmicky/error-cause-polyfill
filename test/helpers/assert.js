@@ -37,12 +37,6 @@ for (const [OriginalAnyError, PonyfillAnyError] of ALL_ERRORS) {
       // eslint-disable-next-line fp/no-mutation
       PonyfillAnyError.stackTraceLimit = oldStackTraceLimit
     }
-
-    // eslint-disable-next-line fp/no-mutation
-    PonyfillAnyError.prepareStackTrace = () => 'stack'
-    assert.equal(new PonyfillAnyError('').stack, 'stack')
-    // eslint-disable-next-line fp/no-mutation
-    PonyfillAnyError.prepareStackTrace = undefined
   }
 }
 
