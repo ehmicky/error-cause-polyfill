@@ -102,16 +102,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
 
   // eslint-disable-next-line fp/no-loops
   for (const ponyfillAnyError of [ponyfillAnyErrorOne, ponyfillAnyErrorTwo]) {
-    assert.deepEqual(
-      Object.getOwnPropertyDescriptor(ponyfillAnyError, 'cause'),
-      {
-        value: 1,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      },
-    )
-
     if (ponyfillAnyError.name === 'AggregateError') {
       assert(Array.isArray(ponyfillAnyError.errors))
       assert.deepEqual(
@@ -132,12 +122,6 @@ for (const [OriginalAnyError, PonyfillAnyError, errorArgs] of ALL_ERRORS) {
   }
 
   const childError = new ChildError(...errorArgs, { cause: 1 })
-  assert.deepEqual(Object.getOwnPropertyDescriptor(childError, 'cause'), {
-    value: 1,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  })
 
   if (childError.name === 'AggregateError') {
     assert(Array.isArray(childError.errors))

@@ -254,6 +254,15 @@ const defineInstanceTests = function ({
     t.is(error.cause, cause)
   })
 
+  test(`error.cause has right descriptors | ${title}`, (t) => {
+    t.deepEqual(getPropertyDescriptor(error, 'cause'), {
+      value: error.cause,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    })
+  })
+
   test(`error.toString() returns name and message | ${title}`, (t) => {
     t.is(error.toString(), `${PonyfillAnyError.name}: ${error.message}`)
   })
