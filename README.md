@@ -22,6 +22,21 @@ Unfortunately, it is
 in Node <16.9.0, Opera nor Safari <15. This library adds support for it in those
 environments.
 
+# Differences with other polyfills
+
+Unlike [`error-cause`](https://github.com/es-shims/error-cause):
+
+- The package size is small (~50kB vs ~2000kB)
+- `Error` child types still work
+- [`Error.stackTraceLimit`](https://nodejs.org/api/errors.html#errorstacktracelimit)
+  still works
+- `error.stack` does not include the polyfill's internal code (in Node.js and
+  Chrome)
+
+Unlike
+[`core-js`](https://github.com/zloirock/core-js)/[Babel](https://github.com/babel/babel),
+this does not require adding `core-js` as a production dependency (~1000kB).
+
 # Install
 
 ```bash

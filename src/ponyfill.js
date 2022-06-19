@@ -47,9 +47,6 @@ import { ERROR_TYPES } from './types.js'
 //       nor `Error` (for `*Error`)
 //  - minor:
 //     - `Error.toString()` does not return `function Error() { [native code] }`
-// Issues with error-cause:
-//  - Package size is too big (~2000kB vs ~50kB)
-//  - Does not support child error types
 export const getErrors = function () {
   return Object.fromEntries(ERROR_TYPES.map(getPonyfillAnyError))
 }
