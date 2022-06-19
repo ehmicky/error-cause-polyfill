@@ -43,3 +43,7 @@ test.serial('getErrors() before another polyfill', (t) => {
   unsetOtherPolyfill()
   t.is(globalThis.TypeError, originalErrors.TypeError)
 })
+
+test('getErrors() should not return AggregateError unless supported', (t) => {
+  t.is('AggregateError' in getErrors(), 'AggregateError' in globalThis)
+})
