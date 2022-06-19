@@ -1,7 +1,7 @@
 // We do not polyfill `AggregateError`. If unsupported, those exports are
 // `undefined`.
 // Any `AggregateError` polyfill must be loaded first.
-export const hasAggregateError = function () {
+const hasAggregateError = function () {
   try {
     // eslint-disable-next-line no-unused-expressions
     AggregateError
