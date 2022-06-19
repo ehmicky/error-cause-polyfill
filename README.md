@@ -129,6 +129,17 @@ polyfill()
 console.log(hasSupport()) // true
 ```
 
+# Related projects
+
+- [`modern-errors`](https://github.com/ehmicky/modern-errors): Handle errors
+  like it's 2022 🔮
+- [`error-type`](https://github.com/ehmicky/error-type): Create custom error
+  types
+- [`normalize-exception`](https://github.com/ehmicky/normalize-exception):
+  Normalize exceptions/errors
+- [`merge-error-cause`](https://github.com/ehmicky/merge-error-cause): Merge an
+  error with its `cause`
+
 # Support
 
 For any question, _don't hesitate_ to [submit an issue on GitHub](../../issues).
