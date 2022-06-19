@@ -7,6 +7,7 @@ import {
   OtherPolyfillTypeError,
   originalErrors,
 } from './helpers/other_polyfill.js'
+import { hasAggregateError } from './helpers/types.js'
 
 const lacksCause = !hasSupport()
 
@@ -76,3 +77,14 @@ test.serial('Can polyfill before another polyfill', (t) => {
   undoPolyfill()
   t.is(globalThis.TypeError !== OtherPolyfillTypeError, lacksCause)
 })
+
+test.serial(
+  'polyfill() should not patch AggregateError unless supported',
+  (t) => {
+    const hasAggregateErrorBefore = hasAggregateError()
+    const undoPolyfill = polyfill()
+    t.is(hasAggregateErrorBefore, hasAggregateError())
+    undoPolyfill()
+    t.is(hasAggregateErrorBefore, hasAggregateError())
+  },
+)
