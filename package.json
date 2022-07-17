@@ -49,7 +49,7 @@
     "test": "test"
   },
   "devDependencies": {
-    "@ehmicky/dev-tasks": "^1.0.83",
+    "@ehmicky/dev-tasks": "^1.0.84",
     "error-cause": "^1.0.4",
     "test-each": "^5.1.1"
   },
