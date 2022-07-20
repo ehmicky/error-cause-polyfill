@@ -1,16 +1,17 @@
 import {
-  polyfill,
-  UndoPolyfill,
-  getErrors,
-  Errors,
-  hasSupport,
-} from 'error-cause-polyfill'
-import {
   expectType,
   expectAssignable,
   expectNotAssignable,
   expectError,
 } from 'tsd'
+
+import {
+  polyfill,
+  UndoPolyfill,
+  getErrors,
+  Errors,
+  hasSupport,
+} from './main.js'
 
 const undoPolyfillFunc = polyfill()
 expectError(polyfill(true))
