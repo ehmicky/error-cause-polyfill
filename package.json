@@ -38,7 +38,7 @@
     "aggregateerror"
   ],
   "license": "Apache-2.0",
-  "homepage": "https://bit.ly/3HvEiON",
+  "homepage": "https://www.github.com/ehmicky/error-cause-polyfill",
   "repository": "ehmicky/error-cause-polyfill",
   "bugs": {
     "url": "https://github.com/ehmicky/error-cause-polyfill/issues"
