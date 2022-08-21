@@ -3,20 +3,20 @@ import test from 'ava'
 
 const { propertyIsEnumerable: isEnum } = Object.prototype
 
-// Tests run only on the parent Type, if "Error"
-export const defineBaseTypeTests = function ({
+// Tests run only on the parent class, if "Error"
+export const defineBaseClassTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
 }) {
-  defineBaseTypeLimitTests({ title, PonyfillAnyError, OriginalAnyError, args })
-  defineBaseTypeCaptTests({ title, PonyfillAnyError, OriginalAnyError })
-  defineBaseTypePrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
+  defineBaseClassLimtTests({ title, PonyfillAnyError, OriginalAnyError, args })
+  defineBaseClassCaptTests({ title, PonyfillAnyError, OriginalAnyError })
+  defineBaseClassPrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
 }
 
-// Tests run only on the parent Type, if "Error", for `stackTraceLimit`
-const defineBaseTypeLimitTests = function ({
+// Tests run only on the parent class, if "Error", for `stackTraceLimit`
+const defineBaseClassLimtTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
@@ -45,8 +45,8 @@ const defineBaseTypeLimitTests = function ({
   })
 }
 
-// Tests run only on the parent Type, if "Error", for `captureStackTrace()`
-const defineBaseTypeCaptTests = function ({
+// Tests run only on the parent class, if "Error", for `captureStackTrace()`
+const defineBaseClassCaptTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
@@ -71,8 +71,8 @@ const defineBaseTypeCaptTests = function ({
   })
 }
 
-// Tests run only on the parent Type, if "Error", for `prepareStackTrace()`
-const defineBaseTypePrepTests = function ({
+// Tests run only on the parent class, if "Error", for `prepareStackTrace()`
+const defineBaseClassPrepTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,

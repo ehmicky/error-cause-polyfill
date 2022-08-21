@@ -1,14 +1,14 @@
-// Run each test on the ErrorType, but also a child and grand child of it.
-// Also run with and without `new` for the base type.
+// Run each test on the Error class, but also a child and grand child of it.
+// Also run with and without `new` for the base class.
 export const getInstanceKinds = function (PonyfillAnyError, args) {
   const ChildError = getChildError(PonyfillAnyError)
   const GrandChildError = getChildError(ChildError)
   return {
-    NewErrorType: {
+    NewErrorClass: {
       PonyfillAnyError,
       error: new PonyfillAnyError(...args),
     },
-    BareErrorType: {
+    BareErrorClass: {
       PonyfillAnyError,
       error: PonyfillAnyError(...args),
     },

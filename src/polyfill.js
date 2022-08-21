@@ -3,7 +3,7 @@ import { setNonEnumProp } from './set.js'
 import { hasSupport } from './support.js'
 
 // Monkey patches the global object, i.e. polyfills it.
-// If another polyfill was applied on global Error types before `polyfill()`
+// If another polyfill was applied on global Error classes before `polyfill()`
 // was called, it will be kept.
 // Idempotent.
 // If `error.cause` is already supported, it is a noop.
@@ -16,7 +16,7 @@ export const polyfill = function () {
   const OriginalErrors = Object.fromEntries(
     Object.entries(PonyfillErrors).map(getOriginalAnyError),
   )
-  Object.entries(PonyfillErrors).forEach(polyfillErrorType)
+  Object.entries(PonyfillErrors).forEach(polyfillErrorClass)
   return undoPolyfill.bind(undefined, OriginalErrors)
 }
 
@@ -27,12 +27,12 @@ const getOriginalAnyError = function ([name]) {
   return [name, globalThis[name]]
 }
 
-const polyfillErrorType = function ([name, PonyfillAnyError]) {
+const polyfillErrorClass = function ([name, PonyfillAnyError]) {
   setNonEnumProp(globalThis, name, PonyfillAnyError)
 }
 
 // `polyfill()` returns a function to undo.
-// If another polyfill was applied on global Error types since `polyfill()`
+// If another polyfill was applied on global Error classes since `polyfill()`
 // was called, it will be undone too.
 // Idempotent.
 // If `polyfill()` was a noop, so is `undoPolyfill()`
@@ -44,9 +44,9 @@ const undoPolyfill = function (OriginalErrors) {
     return
   }
 
-  Object.entries(OriginalErrors).forEach(undoPolyfillErrorType)
+  Object.entries(OriginalErrors).forEach(undoPolyfillErrorClass)
 }
 
-const undoPolyfillErrorType = function ([name, OriginalAnyError]) {
+const undoPolyfillErrorClass = function ([name, OriginalAnyError]) {
   setNonEnumProp(globalThis, name, OriginalAnyError)
 }

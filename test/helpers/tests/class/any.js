@@ -1,8 +1,8 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
 
-// Tests run only on the parent Type, whether "Error" or not
-export const defineAnyTypeTests = function ({
+// Tests run only on the parent class, whether "Error" or not
+export const defineAnyClassTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,

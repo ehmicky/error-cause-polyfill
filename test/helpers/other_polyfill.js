@@ -1,25 +1,25 @@
 // eslint-disable-next-line n/file-extension-in-import
-import OtherPolyfillTypeError from 'error-cause/TypeError/implementation'
+import OtherPolyfillClassError from 'error-cause/TypeError/implementation'
 
-import { getOriginalErrors } from './types.js'
+import { getOriginalErrors } from './classes.js'
 
 const originalErrors = getOriginalErrors()
 
 // Set another polyfill to check for conflicts
 export const setOtherPolyfill = function () {
-  setGlobalTypeError(OtherPolyfillTypeError)
+  setGlobalClassError(OtherPolyfillClassError)
 }
 
 // Undo `setOtherPolyfill()`
 export const unsetOtherPolyfill = function () {
-  setGlobalTypeError(originalErrors.TypeError)
+  setGlobalClassError(originalErrors.TypeError)
 }
 
-export { OtherPolyfillTypeError, originalErrors }
+export { OtherPolyfillClassError, originalErrors }
 
 // Use TypeError so we can polyfill it without impacting `hasSupport()`
 // return value.
-const setGlobalTypeError = function (value) {
+const setGlobalClassError = function (value) {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(globalThis, 'TypeError', {
     value,

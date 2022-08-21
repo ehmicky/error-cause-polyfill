@@ -12,8 +12,8 @@
 export type UndoPolyfill = () => void
 
 /**
- * Modifies the global error types (`Error`, `TypeError`, etc.) so they support
- * `error.cause`. If `error.cause` is already supported, this is a noop.
+ * Modifies the global error classes (`Error`, `TypeError`, etc.) so they
+ * support `error.cause`. If `error.cause` is already supported, this is a noop.
  *
  * This returns a function to undo everything.
  *
@@ -33,7 +33,7 @@ export type UndoPolyfill = () => void
 export function polyfill(): UndoPolyfill
 
 /**
- * Object with each error type (`Error`, `TypeError`, etc.) but with
+ * Object with each error class (`Error`, `TypeError`, etc.) but with
  * `error.cause` support.
  */
 export interface Errors {
@@ -51,11 +51,11 @@ export interface Errors {
 }
 
 /**
- * Returns an object with each error type (`Error`, `TypeError`, etc.) but with
+ * Returns an object with each error class (`Error`, `TypeError`, etc.) but with
  * `error.cause` support. If `error.cause` is already supported, this returns
- * the global error types as is.
+ * the global error classes as is.
  *
- * Unlike `polyfill()`, this does not modify the global error types.
+ * Unlike `polyfill()`, this does not modify the global error classes.
  *
  * @example
  * ```js
@@ -73,7 +73,7 @@ export interface Errors {
 export function getErrors(): Errors
 
 /**
- * Returns whether the global error types currently support `error.cause`.
+ * Returns whether the global error classes currently support `error.cause`.
  *
  * @example
  * ```js

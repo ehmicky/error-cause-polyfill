@@ -1,20 +1,20 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
 
-// Tests run only on the parent Type, if not "Error"
-export const defineMiscTypeTests = function ({
+// Tests run only on the parent class, if not "Error"
+export const defineMiscClassTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
 }) {
-  defineMiscTypeLimitTests({ title, PonyfillAnyError, OriginalAnyError, args })
-  defineMiscTypeCaptTests({ title, PonyfillAnyError, OriginalAnyError })
-  defineMiscTypePrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
+  defineMiscClassLimtTests({ title, PonyfillAnyError, OriginalAnyError, args })
+  defineMiscClassCaptTests({ title, PonyfillAnyError, OriginalAnyError })
+  defineMiscClassPrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
 }
 
-// Tests run only on the parent Type, if not "Error", for `stackTraceLimit`
-const defineMiscTypeLimitTests = function ({
+// Tests run only on the parent class, if not "Error", for `stackTraceLimit`
+const defineMiscClassLimtTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
@@ -42,8 +42,8 @@ const defineMiscTypeLimitTests = function ({
   })
 }
 
-// Tests run only on the parent Type, if not "Error", for `captureStackTrace()`
-const defineMiscTypeCaptTests = function ({
+// Tests run only on the parent class, if not "Error", for `captureStackTrace()`
+const defineMiscClassCaptTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
@@ -60,15 +60,15 @@ const defineMiscTypeCaptTests = function ({
     t.false(hasOwnProperty.call(PonyfillAnyError, 'captureStackTrace'))
   })
 
-  test(`MiscError.captureStackTrace() does not include type name | ${title}`, (t) => {
+  test(`MiscError.captureStackTrace() does not include class name | ${title}`, (t) => {
     const error = {}
     PonyfillAnyError.captureStackTrace(error)
     t.false(error.stack.includes(`${PonyfillAnyError.name}\n`))
   })
 }
 
-// Tests run only on the parent Type, if not "Error", for `prepareStackTrace()`
-const defineMiscTypePrepTests = function ({
+// Tests run only on the parent class, if not "Error", for `prepareStackTrace()`
+const defineMiscClassPrepTests = function ({
   title,
   PonyfillAnyError,
   OriginalAnyError,

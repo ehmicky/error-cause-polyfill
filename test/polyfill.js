@@ -4,7 +4,7 @@ import { polyfill, hasSupport } from 'error-cause-polyfill'
 import {
   setOtherPolyfill,
   unsetOtherPolyfill,
-  OtherPolyfillTypeError,
+  OtherPolyfillClassError,
   originalErrors,
 } from './helpers/other_polyfill.js'
 
@@ -48,15 +48,15 @@ test.serial('polyfill() can be done twice', (t) => {
 test.serial('Can polyfill after another polyfill', (t) => {
   t.is(globalThis.TypeError, originalErrors.TypeError)
   setOtherPolyfill()
-  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(globalThis.TypeError, OtherPolyfillClassError)
   const undoPolyfill = polyfill()
   t.is(
-    globalThis.TypeError !== OtherPolyfillTypeError &&
-      Object.getPrototypeOf(globalThis.TypeError) === OtherPolyfillTypeError,
+    globalThis.TypeError !== OtherPolyfillClassError &&
+      Object.getPrototypeOf(globalThis.TypeError) === OtherPolyfillClassError,
     lacksCause,
   )
   undoPolyfill()
-  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(globalThis.TypeError, OtherPolyfillClassError)
   unsetOtherPolyfill()
   t.is(globalThis.TypeError, originalErrors.TypeError)
 })
@@ -66,7 +66,7 @@ test.serial('Can polyfill before another polyfill', (t) => {
   const undoPolyfill = polyfill()
   t.is(globalThis.TypeError !== originalErrors.TypeError, lacksCause)
   setOtherPolyfill()
-  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(globalThis.TypeError, OtherPolyfillClassError)
   // `error-cause` polyfill `TypeError` inherits from original `Error`, not
   // from original `TypeError`
   t.is(
@@ -74,7 +74,7 @@ test.serial('Can polyfill before another polyfill', (t) => {
     lacksCause,
   )
   undoPolyfill()
-  t.is(globalThis.TypeError !== OtherPolyfillTypeError, lacksCause)
+  t.is(globalThis.TypeError !== OtherPolyfillClassError, lacksCause)
 })
 
 test.serial(

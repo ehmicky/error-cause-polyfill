@@ -1,19 +1,20 @@
+import { ERROR_CLASSES } from './classes.js'
 import { setNonEnumProp, setNonEnumReadonlyProp, setFrozenProp } from './set.js'
 import { proxyStaticProperties } from './static.js'
 import { hasSupport } from './support.js'
-import { ERROR_TYPES } from './types.js'
 
-// Retrieve all ponyfill error types.
+// Retrieve all ponyfill error classes.
 // If `error.cause` is already supported, this returns the global objects.
 // In order to make it work with any `Error` polyfills (e.g. `AggregateError`
 // or another `error.cause` polyfill):
 //  - `getErrors()` is computed on-demand, not on load
 //     - This allows users to have a clear order where each polyfill|ponyfill
 //       is applied
-//  - The current global types (potentially already patched by another library):
+//  - The current global classes (potentially already patched by another
+//    library):
 //     - Are considered the "original" ones
 //     - Are cached in case they were to change
-// The ponyfilled error types reference the original error types, so are not
+// The ponyfilled error classes reference the original error classes, so are not
 // impacted by any other similar ponyfill being applied later.
 // We create the error instance as `new OriginalAnyError(...)` then return it.
 // We cannot use `class PonyfillAnyError extends OriginalAnyError` because it
@@ -48,7 +49,7 @@ import { ERROR_TYPES } from './types.js'
 //  - minor:
 //     - `Error.toString()` does not return `function Error() { [native code] }`
 export const getErrors = function () {
-  return Object.fromEntries(ERROR_TYPES.map(getPonyfillAnyError))
+  return Object.fromEntries(ERROR_CLASSES.map(getPonyfillAnyError))
 }
 
 const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
@@ -69,7 +70,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
     return error
   }
 
-  fixType({ PonyfillAnyError, OriginalAnyError, shouldProxy, argsLength })
+  fixClass({ PonyfillAnyError, OriginalAnyError, shouldProxy, argsLength })
   return [name, PonyfillAnyError]
 }
 
@@ -158,7 +159,7 @@ const isOptionsObject = function (options) {
 //       e.g. `PonyfillAnyError.prototype.toString()`
 //  - `PonyfillAnyError.*` static properties
 //     - By inheriting them: `PonyfillAnyError.__proto__ === OriginalAnyError`
-const fixType = function ({
+const fixClass = function ({
   PonyfillAnyError,
   OriginalAnyError,
   shouldProxy,

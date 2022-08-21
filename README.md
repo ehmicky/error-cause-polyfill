@@ -27,7 +27,7 @@ environments.
 Unlike [`error-cause`](https://github.com/es-shims/error-cause):
 
 - The package size is small (~50kB vs ~2000kB)
-- `Error` child types still work
+- `Error` child classes still work
 - [`Error.stackTraceLimit`](https://nodejs.org/api/errors.html#errorstacktracelimit)
   still works
 - `error.stack` does not include the polyfill's internal code (in Node.js and
@@ -53,7 +53,7 @@ not `require()`.
 
 _Return value_: `() => void`
 
-Modifies the global error types (`Error`, `TypeError`, etc.) so they support
+Modifies the global error classes (`Error`, `TypeError`, etc.) so they support
 `error.cause`. If `error.cause` is already supported, this is a noop.
 
 <!-- eslint-disable import/no-unassigned-import -->
@@ -95,11 +95,11 @@ undoPolyfill()
 
 _Return value_: `object`
 
-Returns an object with each error type (`Error`, `TypeError`, etc.) but with
+Returns an object with each error class (`Error`, `TypeError`, etc.) but with
 `error.cause` support. If `error.cause` is already supported, this returns the
-global error types as is.
+global error classes as is.
 
-Unlike [`polyfill()`](#polyfill), this does not modify the global error types.
+Unlike [`polyfill()`](#polyfill), this does not modify the global error classes.
 
 <!-- eslint-disable no-shadow -->
 
@@ -119,7 +119,7 @@ try {
 
 _Return value_: `boolean`
 
-Returns whether the global error types currently support `error.cause`.
+Returns whether the global error classes currently support `error.cause`.
 
 ```js
 import { hasSupport, polyfill } from 'error-cause-polyfill'
@@ -134,8 +134,8 @@ console.log(hasSupport()) // true
 - [`modern-errors`](https://github.com/ehmicky/modern-errors): Handle errors
   like it's 2022 🔮
 - [`create-error-types`](https://github.com/ehmicky/create-error-types): Create
-  multiple error types
-- [`error-type`](https://github.com/ehmicky/error-type): Create one error type
+  multiple error classes
+- [`error-type`](https://github.com/ehmicky/error-type): Create one error class
 - [`error-serializer`](https://github.com/ehmicky/error-serializer): Convert
   errors to/from plain objects
 - [`normalize-exception`](https://github.com/ehmicky/normalize-exception):

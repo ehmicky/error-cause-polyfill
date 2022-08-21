@@ -1,22 +1,22 @@
 import { hasSupport } from 'error-cause-polyfill'
 
-import { getOriginalErrors, ERROR_TYPES } from '../types.js'
+import { getOriginalErrors, ERROR_CLASSES } from '../classes.js'
 
+import { defineClassTests } from './class/main.js'
 import { defineInstancesTests } from './instance/main.js'
-import { defineTypeTests } from './type/main.js'
 
 // Must be called at load time, before `polyfill()`
 const OriginalErrors = getOriginalErrors()
 const hasCauseSupport = hasSupport()
 
-// Run each test on each type of error
+// Run each test on each class of error
 export const defineAllTests = function (PonyfillAnyErrors, patchesCause) {
   const OriginalBaseError = OriginalErrors.Error
   const PonyfillBaseError = PonyfillAnyErrors.Error
   const supportsCause = hasCauseSupport || patchesCause
 
   // eslint-disable-next-line fp/no-loops
-  for (const name of ERROR_TYPES) {
+  for (const name of ERROR_CLASSES) {
     defineTests({
       name,
       PonyfillAnyErrors,
@@ -38,7 +38,7 @@ const defineTests = function ({
   const PonyfillAnyError = PonyfillAnyErrors[name]
   const { errors, message, cause, args } = getArgs(name)
 
-  defineTypeTests({ title: name, PonyfillAnyError, OriginalAnyError, args })
+  defineClassTests({ title: name, PonyfillAnyError, OriginalAnyError, args })
   defineInstancesTests({
     name,
     PonyfillAnyError,

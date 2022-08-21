@@ -4,7 +4,7 @@ import { getErrors, hasSupport } from 'error-cause-polyfill'
 import {
   setOtherPolyfill,
   unsetOtherPolyfill,
-  OtherPolyfillTypeError,
+  OtherPolyfillClassError,
   originalErrors,
 } from './helpers/other_polyfill.js'
 
@@ -23,12 +23,12 @@ test('getErrors() returns globals if already supported', (t) => {
 test.serial('getErrors() after another polyfill', (t) => {
   t.is(globalThis.TypeError, originalErrors.TypeError)
   setOtherPolyfill()
-  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(globalThis.TypeError, OtherPolyfillClassError)
   const ponyfillErrors = getErrors()
   t.is(
-    ponyfillErrors.TypeError !== OtherPolyfillTypeError &&
+    ponyfillErrors.TypeError !== OtherPolyfillClassError &&
       Object.getPrototypeOf(ponyfillErrors.TypeError) ===
-        OtherPolyfillTypeError,
+        OtherPolyfillClassError,
     lacksCause,
   )
   unsetOtherPolyfill()
@@ -39,7 +39,7 @@ test.serial('getErrors() before another polyfill', (t) => {
   getErrors()
   t.is(globalThis.TypeError, originalErrors.TypeError)
   setOtherPolyfill()
-  t.is(globalThis.TypeError, OtherPolyfillTypeError)
+  t.is(globalThis.TypeError, OtherPolyfillClassError)
   unsetOtherPolyfill()
   t.is(globalThis.TypeError, originalErrors.TypeError)
 })

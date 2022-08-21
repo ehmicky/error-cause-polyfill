@@ -1,6 +1,6 @@
 // We do not polyfill `AggregateError` unless supported.
 // Any `AggregateError` polyfill must be loaded first.
-export const ERROR_TYPES = [
+export const ERROR_CLASSES = [
   { name: 'Error', shouldProxy: true, argsLength: 1 },
   { name: 'ReferenceError', shouldProxy: false, argsLength: 1 },
   { name: 'TypeError', shouldProxy: false, argsLength: 1 },
