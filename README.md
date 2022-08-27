@@ -143,6 +143,8 @@ console.log(hasSupport()) // true
   Normalize exceptions/errors
 - [`merge-error-cause`](https://github.com/ehmicky/merge-error-cause): Merge an
   error with its `cause`
+- [`set-error-props`](https://github.com/ehmicky/set-error-props): Properly
+  update an error's properties
 - [`handle-cli-error`](https://github.com/ehmicky/handle-cli-error): 💣 Error
   handler for CLI applications 💥
 - [`log-process-errors`](https://github.com/ehmicky/log-process-errors): Show
