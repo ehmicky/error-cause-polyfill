@@ -1,5 +1,5 @@
 // eslint-disable-next-line ava/no-ignored-test-files
-import { types } from 'util'
+import { types } from 'node:util'
 
 import test from 'ava'
 
