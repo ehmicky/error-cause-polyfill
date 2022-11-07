@@ -11,7 +11,7 @@ import {
   getErrors,
   Errors,
   hasSupport,
-} from './main.js'
+} from 'error-cause-polyfill'
 
 const undoPolyfillFunc = polyfill()
 expectError(polyfill(true))
