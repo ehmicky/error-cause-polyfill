@@ -136,7 +136,7 @@ console.log(hasSupport()) // true
 # Related projects
 
 - [`modern-errors`](https://github.com/ehmicky/modern-errors): Handle errors
-  like it's 2022 🔮
+  like it's 2023 🔮
 - [`error-custom-class`](https://github.com/ehmicky/error-custom-class): Create
   one error class
 - [`error-class-utils`](https://github.com/ehmicky/error-class-utils): Utilities
