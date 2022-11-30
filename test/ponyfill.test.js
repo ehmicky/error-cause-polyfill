@@ -6,7 +6,7 @@ import {
   unsetOtherPolyfill,
   OtherPolyfillClassError,
   originalErrors,
-} from './helpers/other_polyfill.js'
+} from './helpers/other_polyfill.test.js'
 
 const lacksCause = !hasSupport()
 

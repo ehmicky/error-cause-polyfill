@@ -1,9 +1,9 @@
 import { hasSupport } from 'error-cause-polyfill'
 
-import { getOriginalErrors, ERROR_CLASSES } from '../classes.js'
+import { getOriginalErrors, ERROR_CLASSES } from '../classes.test.js'
 
-import { defineClassTests } from './class/main.js'
-import { defineInstancesTests } from './instance/main.js'
+import { defineClassTests } from './class/main.test.js'
+import { defineInstancesTests } from './instance/main.test.js'
 
 // Must be called at load time, before `polyfill()`
 const OriginalErrors = getOriginalErrors()
