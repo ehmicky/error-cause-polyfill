@@ -2,9 +2,9 @@ import { expectType, expectAssignable, expectNotAssignable } from 'tsd'
 
 import {
   polyfill,
-  UndoPolyfill,
+  type UndoPolyfill,
   getErrors,
-  Errors,
+  type Errors,
   hasSupport,
 } from 'error-cause-polyfill'
 
