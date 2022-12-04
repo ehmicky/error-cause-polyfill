@@ -13,7 +13,7 @@ const undoPolyfillFunc = polyfill()
 polyfill(true)
 expectType<UndoPolyfill>(undoPolyfillFunc)
 expectAssignable<UndoPolyfill>(() => {})
-expectNotAssignable<UndoPolyfill>((_: boolean) => {})
+expectNotAssignable<UndoPolyfill>((arg: boolean) => {})
 undoPolyfillFunc()
 // @ts-expect-error
 undoPolyfillFunc(true)
