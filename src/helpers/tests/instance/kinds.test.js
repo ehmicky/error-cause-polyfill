@@ -10,6 +10,7 @@ export const getInstanceKinds = function (PonyfillAnyError, args) {
     },
     BareErrorClass: {
       PonyfillAnyError,
+      // eslint-disable-next-line new-cap
       error: PonyfillAnyError(...args),
     },
     ChildError: {
