@@ -7,7 +7,7 @@ import { hasSupport } from './support.js'
 // was called, it will be kept.
 // Idempotent.
 // If `error.cause` is already supported, it is a noop.
-export const polyfill = function () {
+export const polyfill = () => {
   if (hasSupport()) {
     return noop
   }
@@ -21,13 +21,11 @@ export const polyfill = function () {
 }
 
 // eslint-disable-next-line no-empty-function
-const noop = function () {}
+const noop = () => {}
 
-const getOriginalAnyError = function ([name]) {
-  return [name, globalThis[name]]
-}
+const getOriginalAnyError = ([name]) => [name, globalThis[name]]
 
-const polyfillErrorClass = function ([name, PonyfillAnyError]) {
+const polyfillErrorClass = ([name, PonyfillAnyError]) => {
   setNonEnumProp(globalThis, name, PonyfillAnyError)
 }
 
@@ -39,7 +37,7 @@ const polyfillErrorClass = function ([name, PonyfillAnyError]) {
 //  - This ensures this is purely functional
 //  - For example, this would prevent from reverting any other polyfills loaded
 //    afterwards
-const undoPolyfill = function (OriginalErrors) {
+const undoPolyfill = (OriginalErrors) => {
   if (globalThis.Error === OriginalErrors.Error) {
     return
   }
@@ -47,6 +45,6 @@ const undoPolyfill = function (OriginalErrors) {
   Object.entries(OriginalErrors).forEach(undoPolyfillErrorClass)
 }
 
-const undoPolyfillErrorClass = function ([name, OriginalAnyError]) {
+const undoPolyfillErrorClass = ([name, OriginalAnyError]) => {
   setNonEnumProp(globalThis, name, OriginalAnyError)
 }

@@ -1,6 +1,6 @@
 // Run each test on the Error class, but also a child and grand child of it.
 // Also run with and without `new` for the base class.
-export const getInstanceKinds = function (PonyfillAnyError, args) {
+export const getInstanceKinds = (PonyfillAnyError, args) => {
   const ChildError = getChildError(PonyfillAnyError)
   const GrandChildError = getChildError(ChildError)
   return {
@@ -24,7 +24,7 @@ export const getInstanceKinds = function (PonyfillAnyError, args) {
   }
 }
 
-const getChildError = function (ParentError) {
+const getChildError = (ParentError) => {
   // eslint-disable-next-line fp/no-class
   class ChildError extends ParentError {}
   // eslint-disable-next-line fp/no-mutating-methods

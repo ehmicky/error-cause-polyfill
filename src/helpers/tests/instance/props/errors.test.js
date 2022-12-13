@@ -2,12 +2,12 @@
 import test from 'ava'
 
 // Tests run on the parent and child error instances, related to `error.errors`
-export const defineErrorsTests = function ({
+export const defineErrorsTests = ({
   title,
   error,
   errors,
   PonyfillAnyError,
-}) {
+}) => {
   if (PonyfillAnyError.name !== 'AggregateError') {
     return
   }

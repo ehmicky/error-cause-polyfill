@@ -2,13 +2,13 @@
 import test from 'ava'
 
 // Tests run on the child error instances
-export const defineChildInstanceTests = function (
+export const defineChildInstanceTests = (
   title,
   {
     ChildError: { PonyfillAnyError: ChildError },
     GrandChildError: { error: grandChildError },
   },
-) {
+) => {
   test(`Grand child error is instanceof child error | ${title}`, (t) => {
     t.true(grandChildError instanceof ChildError)
   })

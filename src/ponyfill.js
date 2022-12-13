@@ -48,11 +48,10 @@ import { hasSupport } from './support.js'
 //       nor `Error` (for `*Error`)
 //  - minor:
 //     - `Error.toString()` does not return `function Error() { [native code] }`
-export const getErrors = function () {
-  return Object.fromEntries(ERROR_CLASSES.map(getPonyfillAnyError))
-}
+export const getErrors = () =>
+  Object.fromEntries(ERROR_CLASSES.map(getPonyfillAnyError))
 
-const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
+const getPonyfillAnyError = ({ name, shouldProxy, argsLength }) => {
   const OriginalAnyError = globalThis[name]
   const OriginalBaseError = globalThis.Error
 
@@ -83,11 +82,7 @@ const getPonyfillAnyError = function ({ name, shouldProxy, argsLength }) {
 // since `PonyfillAnyError.prototype` is a reference to
 // `OriginalAnyError.prototype`, so this would change
 // `OriginalAnyError.prototype.constructor`.
-const fixConstructor = function (
-  error,
-  PonyfillAnyError,
-  value = PonyfillAnyError,
-) {
+const fixConstructor = (error, PonyfillAnyError, value = PonyfillAnyError) => {
   setNonEnumProp(error, 'constructor', value)
 }
 
@@ -98,7 +93,7 @@ const fixConstructor = function (
 //  - In that case, `new.target` will be used
 //  - `new.target` is the function after un-binding, which is what
 //    `captureStackTrace()` needs
-const fixStack = function (error, OriginalBaseError) {
+const fixStack = (error, OriginalBaseError) => {
   if (OriginalBaseError.captureStackTrace !== undefined) {
     OriginalBaseError.captureStackTrace(error, error.constructor)
   }
@@ -110,7 +105,7 @@ const fixStack = function (error, OriginalBaseError) {
 // This fixes it by setting manually. `new.target` is used to handle subclasses.
 // We purposely avoid using `this` since `PonyfillAnyError.call(this, ...)`
 // should behave the same as `PonyfillAnyError(...)`
-const fixInstancePrototype = function (error, newTarget) {
+const fixInstancePrototype = (error, newTarget) => {
   if (
     newTarget !== undefined &&
     Object.getPrototypeOf(error) !== newTarget.prototype
@@ -121,26 +116,20 @@ const fixInstancePrototype = function (error, newTarget) {
 }
 
 // Implements `error.cause` if `OriginalAnyError` does not.
-const fixCause = function (error, options) {
+const fixCause = (error, options) => {
   if (isMissingCause(error, options)) {
     setNonEnumProp(error, 'cause', options.cause)
   }
 }
 
-const isMissingCause = function (error, options) {
-  return (
-    isOptionsObject(options) &&
-    'cause' in options &&
-    options.cause !== error.cause
-  )
-}
+const isMissingCause = (error, options) =>
+  isOptionsObject(options) &&
+  'cause' in options &&
+  options.cause !== error.cause
 
-const isOptionsObject = function (options) {
-  return (
-    (typeof options === 'object' || typeof options === 'function') &&
-    options !== null
-  )
-}
+const isOptionsObject = (options) =>
+  (typeof options === 'object' || typeof options === 'function') &&
+  options !== null
 
 // Fixes:
 //  - Constructor `Function.name`
@@ -159,12 +148,12 @@ const isOptionsObject = function (options) {
 //       e.g. `PonyfillAnyError.prototype.toString()`
 //  - `PonyfillAnyError.*` static properties
 //     - By inheriting them: `PonyfillAnyError.__proto__ === OriginalAnyError`
-const fixClass = function ({
+const fixClass = ({
   PonyfillAnyError,
   OriginalAnyError,
   shouldProxy,
   argsLength,
-}) {
+}) => {
   setNonEnumReadonlyProp(PonyfillAnyError, 'name', OriginalAnyError.name)
   setNonEnumReadonlyProp(PonyfillAnyError, 'length', argsLength)
   setFrozenProp(PonyfillAnyError, 'prototype', OriginalAnyError.prototype)

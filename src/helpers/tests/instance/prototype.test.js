@@ -3,14 +3,14 @@ import test from 'ava'
 
 // Tests run on the parent and child error instances, related to prototype or
 // constructor
-export const defineInstanceProtoTests = function ({
+export const defineInstanceProtoTests = ({
   title,
   error,
   PonyfillAnyError,
   PonyfillBaseError,
   OriginalAnyError,
   OriginalBaseError,
-}) {
+}) => {
   test(`Is instance of original base Error | ${title}`, (t) => {
     t.true(error instanceof OriginalBaseError)
   })
@@ -46,9 +46,6 @@ export const defineInstanceProtoTests = function ({
 }
 
 // Return property descriptor that is own or is inherited from direct parent
-const getPropertyDescriptor = function (object, propName) {
-  return (
-    Object.getOwnPropertyDescriptor(object, propName) ||
-    Object.getOwnPropertyDescriptor(Object.getPrototypeOf(object), propName)
-  )
-}
+const getPropertyDescriptor = (object, propName) =>
+  Object.getOwnPropertyDescriptor(object, propName) ||
+  Object.getOwnPropertyDescriptor(Object.getPrototypeOf(object), propName)

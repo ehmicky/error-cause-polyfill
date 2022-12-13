@@ -2,24 +2,24 @@
 import test from 'ava'
 
 // Tests run only on the parent class, if not "Error"
-export const defineMiscClassTests = function ({
+export const defineMiscClassTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   defineMiscClassLimtTests({ title, PonyfillAnyError, OriginalAnyError, args })
   defineMiscClassCaptTests({ title, PonyfillAnyError, OriginalAnyError })
   defineMiscClassPrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
 }
 
 // Tests run only on the parent class, if not "Error", for `stackTraceLimit`
-const defineMiscClassLimtTests = function ({
+const defineMiscClassLimtTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   if (!('stackTraceLimit' in OriginalAnyError)) {
     return
   }
@@ -43,11 +43,11 @@ const defineMiscClassLimtTests = function ({
 }
 
 // Tests run only on the parent class, if not "Error", for `captureStackTrace()`
-const defineMiscClassCaptTests = function ({
+const defineMiscClassCaptTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
-}) {
+}) => {
   if (!('captureStackTrace' in OriginalAnyError)) {
     return
   }
@@ -68,12 +68,12 @@ const defineMiscClassCaptTests = function ({
 }
 
 // Tests run only on the parent class, if not "Error", for `prepareStackTrace()`
-const defineMiscClassPrepTests = function ({
+const defineMiscClassPrepTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   test(`MiscError.prepareStackTrace() is not present | ${title}`, (t) => {
     t.false('prepareStackTrace' in PonyfillAnyError)
   })

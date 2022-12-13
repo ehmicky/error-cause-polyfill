@@ -1,5 +1,5 @@
 // Set non-enumerable property
-export const setNonEnumProp = function (object, propName, value) {
+export const setNonEnumProp = (object, propName, value) => {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(object, propName, {
     value,
@@ -10,7 +10,7 @@ export const setNonEnumProp = function (object, propName, value) {
 }
 
 // Set non-enumerable and non-writable property
-export const setNonEnumReadonlyProp = function (object, propName, value) {
+export const setNonEnumReadonlyProp = (object, propName, value) => {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(object, propName, {
     value,
@@ -21,7 +21,7 @@ export const setNonEnumReadonlyProp = function (object, propName, value) {
 }
 
 // Set non-enumerable, non-writable and non-configurable property
-export const setFrozenProp = function (object, propName, value) {
+export const setFrozenProp = (object, propName, value) => {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(object, propName, {
     value,

@@ -6,7 +6,7 @@ import { defineStackTests } from './stack.test.js'
 
 // Tests run on the parent and child error instances, related to core error
 // instance properties: name|message|stack|cause|errors
-export const defineInstancePropsTests = function ({
+export const defineInstancePropsTests = ({
   title,
   error,
   PonyfillAnyError,
@@ -16,7 +16,7 @@ export const defineInstancePropsTests = function ({
   message,
   cause,
   args,
-}) {
+}) => {
   defineNameTests(title, error, PonyfillAnyError)
   defineMessageTests(title, error, message)
   defineStackTests(title, error, OriginalAnyError)

@@ -6,12 +6,12 @@ import { getOriginalErrors } from './classes.test.js'
 const originalErrors = getOriginalErrors()
 
 // Set another polyfill to check for conflicts
-export const setOtherPolyfill = function () {
+export const setOtherPolyfill = () => {
   setGlobalClassError(OtherPolyfillClassError)
 }
 
 // Undo `setOtherPolyfill()`
-export const unsetOtherPolyfill = function () {
+export const unsetOtherPolyfill = () => {
   setGlobalClassError(originalErrors.TypeError)
 }
 
@@ -19,7 +19,7 @@ export { OtherPolyfillClassError, originalErrors }
 
 // Use TypeError so we can polyfill it without impacting `hasSupport()`
 // return value.
-const setGlobalClassError = function (value) {
+const setGlobalClassError = (value) => {
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(globalThis, 'TypeError', {
     value,

@@ -3,11 +3,7 @@ import { types } from 'node:util'
 
 import test from 'ava'
 
-export const defineInstanceMiscTests = function ({
-  title,
-  error,
-  PonyfillAnyError,
-}) {
+export const defineInstanceMiscTests = ({ title, error, PonyfillAnyError }) => {
   test(`error.toString() returns name and message | ${title}`, (t) => {
     t.is(error.toString(), `${PonyfillAnyError.name}: ${error.message}`)
   })

@@ -15,11 +15,11 @@
 //  - `PonyfillAnyError.captureStackTrace()` is present with `undefined` value
 //  - But `OriginalAnyError.captureStackTrace()` is absent
 //  - This difference is needed to set the proxy
-export const proxyStaticProperties = function (
+export const proxyStaticProperties = (
   PonyfillAnyError,
   OriginalAnyError,
   shouldProxy,
-) {
+) => {
   if (!shouldProxy) {
     return
   }
@@ -47,21 +47,19 @@ const STATIC_PROPERTIES = [
   },
 ]
 
-const proxyStaticProperty = function (
+const proxyStaticProperty = (
   { propName, testPropName, enumerable },
   PonyfillAnyError,
   OriginalAnyError,
-) {
+) => {
   if (!(testPropName in OriginalAnyError)) {
     return
   }
 
   // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(PonyfillAnyError, propName, {
-    get() {
-      return OriginalAnyError[propName]
-    },
-    set(value) {
+    get: () => OriginalAnyError[propName],
+    set: (value) => {
       // eslint-disable-next-line fp/no-mutation, no-param-reassign
       OriginalAnyError[propName] = value
     },

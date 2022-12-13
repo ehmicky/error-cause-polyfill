@@ -4,24 +4,24 @@ import test from 'ava'
 const { propertyIsEnumerable: isEnum } = Object.prototype
 
 // Tests run only on the parent class, if "Error"
-export const defineBaseClassTests = function ({
+export const defineBaseClassTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   defineBaseClassLimtTests({ title, PonyfillAnyError, OriginalAnyError, args })
   defineBaseClassCaptTests({ title, PonyfillAnyError, OriginalAnyError })
   defineBaseClassPrepTests({ title, PonyfillAnyError, OriginalAnyError, args })
 }
 
 // Tests run only on the parent class, if "Error", for `stackTraceLimit`
-const defineBaseClassLimtTests = function ({
+const defineBaseClassLimtTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   test(`Error.stackTraceLimit is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.stackTraceLimit, OriginalAnyError.stackTraceLimit)
   })
@@ -46,11 +46,11 @@ const defineBaseClassLimtTests = function ({
 }
 
 // Tests run only on the parent class, if "Error", for `captureStackTrace()`
-const defineBaseClassCaptTests = function ({
+const defineBaseClassCaptTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
-}) {
+}) => {
   test(`Error.captureStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.captureStackTrace, OriginalAnyError.captureStackTrace)
   })
@@ -72,12 +72,12 @@ const defineBaseClassCaptTests = function ({
 }
 
 // Tests run only on the parent class, if "Error", for `prepareStackTrace()`
-const defineBaseClassPrepTests = function ({
+const defineBaseClassPrepTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   test(`Error.prepareStackTrace() is same as original | ${title}`, (t) => {
     t.is(PonyfillAnyError.prepareStackTrace, OriginalAnyError.prepareStackTrace)
   })

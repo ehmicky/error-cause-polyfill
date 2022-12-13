@@ -2,7 +2,7 @@
 import test from 'ava'
 
 // Tests run on the parent and child error instances, related to `error.message`
-export const defineMessageTests = function (title, error, message) {
+export const defineMessageTests = (title, error, message) => {
   test(`error.message is correct | ${title}`, (t) => {
     t.is(error.message, message)
   })

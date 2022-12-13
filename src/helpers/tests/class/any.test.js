@@ -2,11 +2,11 @@
 import test from 'ava'
 
 // Tests run only on the parent class, whether "Error" or not
-export const defineAnyClassTests = function ({
+export const defineAnyClassTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
-}) {
+}) => {
   test(`prototype is same as original prototype | ${title}`, (t) => {
     t.is(PonyfillAnyError.prototype, OriginalAnyError.prototype)
   })

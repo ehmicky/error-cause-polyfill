@@ -10,7 +10,7 @@ const OriginalErrors = getOriginalErrors()
 const hasCauseSupport = hasSupport()
 
 // Run each test on each class of error
-export const defineAllTests = function (PonyfillAnyErrors, patchesCause) {
+export const defineAllTests = (PonyfillAnyErrors, patchesCause) => {
   const OriginalBaseError = OriginalErrors.Error
   const PonyfillBaseError = PonyfillAnyErrors.Error
   const supportsCause = hasCauseSupport || patchesCause
@@ -27,13 +27,13 @@ export const defineAllTests = function (PonyfillAnyErrors, patchesCause) {
   }
 }
 
-const defineTests = function ({
+const defineTests = ({
   name,
   PonyfillAnyErrors,
   PonyfillBaseError,
   OriginalBaseError,
   supportsCause,
-}) {
+}) => {
   const OriginalAnyError = OriginalErrors[name]
   const PonyfillAnyError = PonyfillAnyErrors[name]
   const { errors, message, cause, args } = getArgs(name)
@@ -53,7 +53,7 @@ const defineTests = function ({
   })
 }
 
-const getArgs = function (name) {
+const getArgs = (name) => {
   const errors = name === 'AggregateError' ? [['testErrors']] : []
   const message = 'testMessage'
   const cause = 'testCause'

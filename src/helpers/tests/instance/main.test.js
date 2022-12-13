@@ -5,7 +5,7 @@ import { defineInstancePropsTests } from './props/main.test.js'
 import { defineInstanceProtoTests } from './prototype.test.js'
 
 // Tests run on the parent and child error instances
-export const defineInstancesTests = function ({
+export const defineInstancesTests = ({
   name,
   PonyfillAnyError,
   PonyfillBaseError,
@@ -16,7 +16,7 @@ export const defineInstancesTests = function ({
   message,
   cause,
   args,
-}) {
+}) => {
   const instanceKinds = getInstanceKinds(PonyfillAnyError, args)
   Object.entries(instanceKinds).forEach(
     ([title, { PonyfillAnyError: PonyfillAnyErrorA, error }]) => {
@@ -38,7 +38,7 @@ export const defineInstancesTests = function ({
   defineChildInstanceTests(name, instanceKinds)
 }
 
-const defineInstanceTests = function ({
+const defineInstanceTests = ({
   title,
   error,
   PonyfillAnyError,
@@ -50,7 +50,7 @@ const defineInstanceTests = function ({
   message,
   cause,
   args,
-}) {
+}) => {
   defineInstanceProtoTests({
     title,
     error,

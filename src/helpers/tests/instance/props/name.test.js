@@ -4,7 +4,7 @@ import test from 'ava'
 const { hasOwnProperty: hasOwn } = Object.prototype
 
 // Tests run on the parent and child error instances, related to `error.name`
-export const defineNameTests = function (title, error, PonyfillAnyError) {
+export const defineNameTests = (title, error, PonyfillAnyError) => {
   test(`error.name is correct | ${title}`, (t) => {
     t.is(error.name, PonyfillAnyError.name)
   })

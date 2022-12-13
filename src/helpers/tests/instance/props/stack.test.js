@@ -2,7 +2,7 @@
 import test from 'ava'
 
 // Tests run on the parent and child error instances, related to `error.stack`
-export const defineStackTests = function (title, error, OriginalAnyError) {
+export const defineStackTests = (title, error, OriginalAnyError) => {
   test(`error.stack includes name and message | ${title}`, (t) => {
     t.true(error.stack.includes(error.toString()))
   })
@@ -31,6 +31,4 @@ export const defineStackTests = function (title, error, OriginalAnyError) {
   })
 }
 
-const isStackLine = function (line) {
-  return line.trim().startsWith('at ')
-}
+const isStackLine = (line) => line.trim().startsWith('at ')

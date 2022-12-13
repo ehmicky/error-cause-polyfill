@@ -3,12 +3,12 @@ import { defineBaseClassTests } from './base.test.js'
 import { defineMiscClassTests } from './misc.test.js'
 
 // Tests run only on the parent class
-export const defineClassTests = function ({
+export const defineClassTests = ({
   title,
   PonyfillAnyError,
   OriginalAnyError,
   args,
-}) {
+}) => {
   defineAnyClassTests({ title, PonyfillAnyError, OriginalAnyError })
 
   if (PonyfillAnyError.name === 'Error') {
