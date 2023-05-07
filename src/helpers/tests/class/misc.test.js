@@ -29,7 +29,7 @@ const defineMiscClassLimtTests = ({
   })
 
   test(`MiscError.stackTraceLimit is inherited | ${title}`, (t) => {
-    t.false(hasOwnProperty.call(PonyfillAnyError, 'stackTraceLimit'))
+    t.false(Object.hasOwn(PonyfillAnyError, 'stackTraceLimit'))
   })
 
   test.serial(`MiscError.stackTraceLimit is a noop | ${title}`, (t) => {
@@ -57,7 +57,7 @@ const defineMiscClassCaptTests = ({
   })
 
   test(`MiscError.captureStackTrace() is inherited | ${title}`, (t) => {
-    t.false(hasOwnProperty.call(PonyfillAnyError, 'captureStackTrace'))
+    t.false(Object.hasOwn(PonyfillAnyError, 'captureStackTrace'))
   })
 
   test(`MiscError.captureStackTrace() does not include class name | ${title}`, (t) => {

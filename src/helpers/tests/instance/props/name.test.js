@@ -1,8 +1,6 @@
 // eslint-disable-next-line ava/no-ignored-test-files
 import test from 'ava'
 
-const { hasOwnProperty: hasOwn } = Object.prototype
-
 // Tests run on the parent and child error instances, related to `error.name`
 export const defineNameTests = (title, error, PonyfillAnyError) => {
   test(`error.name is correct | ${title}`, (t) => {
@@ -10,8 +8,8 @@ export const defineNameTests = (title, error, PonyfillAnyError) => {
   })
 
   test(`error.name is inherited | ${title}`, (t) => {
-    t.false(hasOwn.call(error, 'name'))
-    t.true(hasOwn.call(Object.getPrototypeOf(error), 'name'))
+    t.false(Object.hasOwn(error, 'name'))
+    t.true(Object.hasOwn(Object.getPrototypeOf(error), 'name'))
   })
 
   test(`error.name has right descriptors | ${title}`, (t) => {
