@@ -1,4 +1,5 @@
 import test from 'ava'
+import { getErrors, hasSupport } from 'error-cause-polyfill'
 
 import {
   setOtherPolyfill,
@@ -7,7 +8,6 @@ import {
   originalErrors,
 } from './helpers/other_polyfill.test.js'
 
-import { getErrors, hasSupport } from 'error-cause-polyfill'
 
 const lacksCause = !hasSupport()
 

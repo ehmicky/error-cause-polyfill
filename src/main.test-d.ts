@@ -1,5 +1,3 @@
-import { expectType, expectAssignable, expectNotAssignable } from 'tsd'
-
 import {
   polyfill,
   type UndoPolyfill,
@@ -7,6 +5,8 @@ import {
   type Errors,
   hasSupport,
 } from 'error-cause-polyfill'
+import { expectType, expectAssignable, expectNotAssignable } from 'tsd'
+
 
 const undoPolyfillFunc = polyfill()
 // @ts-expect-error
