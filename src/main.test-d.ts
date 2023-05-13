@@ -7,7 +7,6 @@ import {
 } from 'error-cause-polyfill'
 import { expectType, expectAssignable, expectNotAssignable } from 'tsd'
 
-
 const undoPolyfillFunc = polyfill()
 // @ts-expect-error
 polyfill(true)

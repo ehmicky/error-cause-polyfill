@@ -2,7 +2,6 @@ import { polyfill } from 'error-cause-polyfill'
 
 import { defineAllTests } from '../helpers/tests/main.test.js'
 
-
 // Run tests with the Error classes after polyfill()
 // We use different test files which import a common test helper because:
 //  - `polyfill()` changes the global variable, i.e. must be in a separate

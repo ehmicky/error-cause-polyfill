@@ -5,7 +5,6 @@ import { getOriginalErrors, ERROR_CLASSES } from '../classes.test.js'
 import { defineClassTests } from './class/main.test.js'
 import { defineInstancesTests } from './instance/main.test.js'
 
-
 // Must be called at load time, before `polyfill()`
 const OriginalErrors = getOriginalErrors()
 const hasCauseSupport = hasSupport()

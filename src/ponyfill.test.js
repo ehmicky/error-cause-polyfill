@@ -8,7 +8,6 @@ import {
   originalErrors,
 } from './helpers/other_polyfill.test.js'
 
-
 const lacksCause = !hasSupport()
 
 test('getErrors() does not modify globals', (t) => {

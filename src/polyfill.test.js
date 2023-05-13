@@ -8,7 +8,6 @@ import {
   originalErrors,
 } from './helpers/other_polyfill.test.js'
 
-
 const lacksCause = !hasSupport()
 
 test.serial('polyfill() patches globals unless already supported', (t) => {
