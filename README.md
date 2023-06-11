@@ -63,7 +63,7 @@ _Return value_: `() => void`
 Modifies the global error classes (`Error`, `TypeError`, etc.) so they support
 `error.cause`. If `error.cause` is already supported, this is a noop.
 
-<!-- eslint-disable import/no-unassigned-import, import/extensions -->
+<!-- eslint-disable import/no-unassigned-import, import/extensions, n/file-extension-in-import -->
 
 ```js
 import 'error-cause-polyfill/auto'
