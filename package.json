@@ -46,7 +46,10 @@
   ],
   "license": "MIT",
   "homepage": "https://www.github.com/ehmicky/error-cause-polyfill",
-  "repository": "ehmicky/error-cause-polyfill",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehmicky/error-cause-polyfill.git"
+  },
   "bugs": {
     "url": "https://github.com/ehmicky/error-cause-polyfill/issues"
   },
