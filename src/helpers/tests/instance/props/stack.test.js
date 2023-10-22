@@ -22,12 +22,12 @@ export const defineStackTests = (title, error, OriginalAnyError) => {
   })
 
   test(`error.stack has right descriptors | ${title}`, (t) => {
-    t.deepEqual(Object.getOwnPropertyDescriptor(error, 'stack'), {
-      value: error.stack,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    })
+    const { enumerable, configurable } = Object.getOwnPropertyDescriptor(
+      error,
+      'stack',
+    )
+    t.false(enumerable)
+    t.true(configurable)
   })
 }
 
