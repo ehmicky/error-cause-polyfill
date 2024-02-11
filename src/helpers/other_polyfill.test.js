@@ -1,4 +1,3 @@
-// eslint-disable-next-line n/file-extension-in-import
 import OtherPolyfillClassError from 'error-cause/TypeError/implementation'
 
 import { getOriginalErrors } from './classes.test.js'
