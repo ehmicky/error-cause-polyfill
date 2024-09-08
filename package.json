@@ -58,7 +58,7 @@
     "lib": "src"
   },
   "devDependencies": {
-    "@ehmicky/dev-tasks": "^3.0.10",
+    "@ehmicky/dev-tasks": "^3.0.11",
     "error-cause": "^1.0.8",
     "test-each": "^7.0.0"
   },
