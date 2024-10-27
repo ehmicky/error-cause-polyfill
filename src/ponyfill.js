@@ -110,7 +110,6 @@ const fixInstancePrototype = (error, newTarget) => {
     newTarget !== undefined &&
     Object.getPrototypeOf(error) !== newTarget.prototype
   ) {
-    // eslint-disable-next-line fp/no-mutating-methods
     Object.setPrototypeOf(error, newTarget.prototype)
   }
 }
@@ -157,7 +156,6 @@ const fixClass = ({
   setNonEnumReadonlyProp(PonyfillAnyError, 'name', OriginalAnyError.name)
   setNonEnumReadonlyProp(PonyfillAnyError, 'length', argsLength)
   setFrozenProp(PonyfillAnyError, 'prototype', OriginalAnyError.prototype)
-  // eslint-disable-next-line fp/no-mutating-methods
   Object.setPrototypeOf(PonyfillAnyError, OriginalAnyError)
   proxyStaticProperties(PonyfillAnyError, OriginalAnyError, shouldProxy)
 }
