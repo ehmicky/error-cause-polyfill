@@ -1,11 +1,11 @@
-import { expectType, expectAssignable, expectNotAssignable } from 'tsd'
+import { expectAssignable, expectNotAssignable, expectType } from 'tsd'
 
 import {
-  polyfill,
-  type UndoPolyfill,
   getErrors,
-  type Errors,
   hasSupport,
+  polyfill,
+  type Errors,
+  type UndoPolyfill,
 } from 'error-cause-polyfill'
 
 const undoPolyfillFunc = polyfill()

@@ -1,5 +1,5 @@
 import { ERROR_CLASSES } from './classes.js'
-import { setNonEnumProp, setNonEnumReadonlyProp, setFrozenProp } from './set.js'
+import { setFrozenProp, setNonEnumProp, setNonEnumReadonlyProp } from './set.js'
 import { proxyStaticProperties } from './static.js'
 import { hasSupport } from './support.js'
 

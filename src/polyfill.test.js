@@ -1,13 +1,13 @@
 import test from 'ava'
 
 import {
+  originalErrors,
+  OtherPolyfillClassError,
   setOtherPolyfill,
   unsetOtherPolyfill,
-  OtherPolyfillClassError,
-  originalErrors,
 } from './helpers/other_polyfill.test.js'
 
-import { polyfill, hasSupport } from 'error-cause-polyfill'
+import { hasSupport, polyfill } from 'error-cause-polyfill'
 
 const lacksCause = !hasSupport()
 

@@ -14,7 +14,7 @@ export const unsetOtherPolyfill = () => {
   setGlobalClassError(originalErrors.TypeError)
 }
 
-export { OtherPolyfillClassError, originalErrors }
+export { originalErrors, OtherPolyfillClassError }
 
 // Use TypeError so we can polyfill it without impacting `hasSupport()`
 // return value.

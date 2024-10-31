@@ -1,10 +1,10 @@
 import test from 'ava'
 
 import {
+  originalErrors,
+  OtherPolyfillClassError,
   setOtherPolyfill,
   unsetOtherPolyfill,
-  OtherPolyfillClassError,
-  originalErrors,
 } from './helpers/other_polyfill.test.js'
 
 import { getErrors, hasSupport } from 'error-cause-polyfill'

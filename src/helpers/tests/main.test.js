@@ -1,4 +1,4 @@
-import { getOriginalErrors, ERROR_CLASSES } from '../classes.test.js'
+import { ERROR_CLASSES, getOriginalErrors } from '../classes.test.js'
 
 import { defineClassTests } from './class/main.test.js'
 import { defineInstancesTests } from './instance/main.test.js'
