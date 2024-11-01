@@ -28,6 +28,7 @@ const getChildError = (ParentError) => {
   // eslint-disable-next-line fp/no-class
   class ChildError extends ParentError {}
 
+  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(ChildError.prototype, 'name', {
     value: ChildError.name,
     writable: true,

@@ -56,6 +56,7 @@ const proxyStaticProperty = (
     return
   }
 
+  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(PonyfillAnyError, propName, {
     get: () => OriginalAnyError[propName],
     set: (value) => {

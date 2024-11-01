@@ -19,6 +19,7 @@ export { originalErrors, OtherPolyfillClassError }
 // Use TypeError so we can polyfill it without impacting `hasSupport()`
 // return value.
 const setGlobalClassError = (value) => {
+  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(globalThis, 'TypeError', {
     value,
     writable: true,
